@@ -8,7 +8,7 @@
 #pragma message("⚠️ ¡ALERTA! Ninguna macro está definida.")
 #endif
 
-
+#include <crtdbg.h>
 #include <ctype.h>
 
 #include <PxPhysicsAPI.h>
@@ -197,6 +197,11 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 
 int main(int, const char*const*)
 {
+#ifdef _DEBUG
+	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);	
+	//_CrtSetBreakAlloc(2291);
+	//_CrtSetBreakAlloc(160);
+#endif
 #ifndef OFFLINE_EXECUTION 
 	extern void renderLoop();
 	renderLoop();
