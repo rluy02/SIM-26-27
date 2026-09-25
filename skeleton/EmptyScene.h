@@ -15,6 +15,7 @@ public:
 
         // Se registra el RenderItem exactamente como en la plantilla original
         m_renderItem = new RenderItem(shape, &m_transform, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+        shape->release();
     }
 
     void update(double dt) override {

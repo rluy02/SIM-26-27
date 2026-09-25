@@ -38,16 +38,16 @@ using namespace physx;
 PxDefaultAllocator		gAllocator;
 PxDefaultErrorCallback	gErrorCallback;
 
-PxFoundation*			gFoundation = NULL;
-PxPhysics*				gPhysics	= NULL;
+PxFoundation* gFoundation = NULL;
+PxPhysics* gPhysics = NULL;
 
 
-PxMaterial*				gMaterial	= NULL;
+PxMaterial* gMaterial = NULL;
 
-PxPvd*                  gPvd        = NULL;
+PxPvd* gPvd = NULL;
 
-PxDefaultCpuDispatcher*	gDispatcher = NULL;
-PxScene*				gScene      = NULL;
+PxDefaultCpuDispatcher* gDispatcher = NULL;
+PxScene* gScene = NULL;
 ContactReportCallback gContactReportCallback;
 
 // Global variables for physics timing. We use a fixed timestep for physics simulation, and accumulate time to determine when to step the physics simulation.
@@ -69,13 +69,13 @@ void initPhysics(bool interactive)
 
 	gPvd = PxCreatePvd(*gFoundation);
 	PxPvdTransport* transport = PxDefaultPvdSocketTransportCreate(PVD_HOST, 5425, 10);
-	
-	if(transport){
+
+	if (transport) {
 		gPvd->connect(*transport, PxPvdInstrumentationFlag::eALL);
 	}
-	
 
-	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(),true,gPvd);
+
+	gPhysics = PxCreatePhysics(PX_PHYSICS_VERSION, *gFoundation, PxTolerancesScale(), true, gPvd);
 
 	if (!gPhysics)
 	{
@@ -92,18 +92,18 @@ void initPhysics(bool interactive)
 
 	gDispatcher = PxDefaultCpuDispatcherCreate(2);
 	sceneDesc.cpuDispatcher = gDispatcher;
-	
-	
+
+
 	sceneDesc.filterShader = contactReportFilterShader;
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	// Registrar las prácticas/escenas del curso
 	SceneManager::instance().registerScene<EmptyScene>("EscenaVacia");
 	SceneManager::instance().registerScene<P0S_Scene>("P0S_Scene");
-	
+
 	// Cargar la escena inicial
 	SceneManager::instance().changeScene("EscenaVacia");
-	
+
 }
 
 
@@ -112,7 +112,7 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	PX_UNUSED(interactive);
-	
+
 	if (!gScene) return;
 
 	// Accumulate time and step the physics simulation in fixed timesteps
@@ -139,7 +139,7 @@ void stepPhysics(bool interactive, double t)
 void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
-	 
+
 	// Clean scene and dispatcher first to avoid memory leaks
 	if (gScene) {
 		gScene->release();
@@ -149,10 +149,10 @@ void cleanupPhysics(bool interactive)
 		gDispatcher->release();
 		gDispatcher = nullptr;
 	}
-	
+
 	//Clean extensions before releasing physics
 	PxCloseExtensions();
-	
+
 	// Clean material and physics
 	if (gMaterial) {
 		gMaterial->release();
@@ -195,20 +195,22 @@ void onCollision(physx::PxActor* actor1, physx::PxActor* actor2)
 }
 
 
-int main(int, const char*const*)
+int main(int, const char* const*)
 {
 #ifdef _DEBUG
-	//_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);	
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	//_CrtSetBreakAlloc(2291);
 	//_CrtSetBreakAlloc(160);
 #endif
 #ifndef OFFLINE_EXECUTION 
-	extern void renderLoop();
-	renderLoop();
+	{
+		extern void renderLoop();
+		renderLoop();
+	}
 #else
 	static const PxU32 frameCount = 100;
 	initPhysics(false);
-	for(PxU32 i=0; i<frameCount; i++)
+	for (PxU32 i = 0; i < frameCount; i++)
 		stepPhysics(false);
 	cleanupPhysics(false);
 #endif
