@@ -14,8 +14,9 @@ public:
 
 	void init() override {
 		physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(1.0f)); //referencia compartida
-		//RetoA(shape);
-		RetoB(shape);
+		////RetoA(shape);
+		//RetoB(shape);
+		RetoC(shape);
 		shape->release();
 	}
 
@@ -39,14 +40,12 @@ public:
 			}
 		}
 		m_renderItems.clear();
+		m_transforms.clear();
 	}
 
 private:
 	physx::PxTransform m_transform;
 	physx::PxTransform m_transformE;
-	//physx::PxTransform m_transformU;
-	//physx::PxTransform m_transformV;
-	//physx::PxTransform m_transformW;
 	std::unordered_map<TransformKey, physx::PxTransform> m_transforms;
 	std::vector<RenderItem*> m_renderItems;
 
@@ -103,6 +102,16 @@ private:
 	}
 
 	void RetoC(physx::PxShape* shape) {
+		Vector3D A(-8.0, 1.0, -8.0), B(8.0, 8.0, 8.0);
+
+		float t = 0.f;
+		for (int i = 0;i < 10;i++) {
+
+			Vector3D P_t = (B - A) * t + A; //interpolacion (puesto asi porque el operador recibe Vector * escalar)
+			t += 0.1f; //incr
+			m_transforms.insert({ "m_transform" + i, physx::PxTransform(P_t) });
+			m_renderItems.emplace_back(new RenderItem(shape, &m_transforms.at("m_transform" + i), Vector4(0.f, 0.f, 0.f, 1.f)));
+		}
 
 	}
 };

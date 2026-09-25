@@ -129,6 +129,9 @@ void renderCallback()
 
 void exitCallback(void)
 {
+	//! REVISAR LUEGO
+	//Si cambia la escena llama al cleanup, pero no estoy seguro de si al salirse tambien
+	//Probablemente falta aqui destruir lo que se haya creado de la escena
 	delete sCamera;
 	cleanupPhysics(true);
 }
