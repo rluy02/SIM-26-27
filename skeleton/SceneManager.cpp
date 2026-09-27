@@ -43,6 +43,16 @@ void SceneManager::update(double dt) {
     }
 }
 
+void SceneManager::shutdown() {
+    if (m_currentScene) {
+        m_currentScene->cleanup();
+        m_currentScene.reset();
+    }
+
+    m_hasPendingChange = false;
+    m_pendingSceneName.clear();
+}
+
 // Reenvía eventos de teclado a la escena actual. Mantener este método simple
 // permite centralizar atajos globales si se desea en el futuro.
 void SceneManager::keyPress(unsigned char key, const physx::PxTransform& cameraTransform) {

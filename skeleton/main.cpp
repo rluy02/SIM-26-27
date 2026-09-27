@@ -140,6 +140,8 @@ void cleanupPhysics(bool interactive)
 {
 	PX_UNUSED(interactive);
 
+	SceneManager::instance().shutdown();
+
 	// Clean scene and dispatcher first to avoid memory leaks
 	if (gScene) {
 		gScene->release();

@@ -33,6 +33,9 @@ public:
     // dt es el tiempo en segundos desde la última actualización.
     void update(double dt);
 
+    // Limpia y destruye la escena actual, descartando cambios pendientes.
+    void shutdown();
+
     // Reenvía eventos de teclado a la escena actual.
     void keyPress(unsigned char key, const physx::PxTransform& cameraTransform);
 
