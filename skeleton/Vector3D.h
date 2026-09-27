@@ -1,5 +1,6 @@
 #pragma once
 #include "PxPhysicsAPI.h"
+#include <iostream>
 #include <cassert>
 #include <cmath>
 
@@ -47,7 +48,7 @@ public:
 	{
 		return Vector3D(v.x * d, v.y * d, v.z * d);
 	}
-	friend inline Vector3D operator*(float d,const Vector3D& v) //por izq
+	friend inline Vector3D operator*(float d, const Vector3D& v) //por izq
 	{
 		return v * d; //llamada al metodo de mult. por derecha
 	}
@@ -106,11 +107,16 @@ public:
 
 	// ** conversions
 	//
-	
+
 	// implicit 
 	operator physx::PxVec3() const
 	{
 		return physx::PxVec3(x, y, z);
 	}
 
+	//ouput
+	friend inline std::ostream& operator<<(std::ostream& o, const Vector3D& v) {
+		o << "(x:" << v.x << ", y:" << v.y << ", z:" << v.z << ")";
+		return o;
+	}
 };

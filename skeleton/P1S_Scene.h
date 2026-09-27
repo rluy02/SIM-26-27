@@ -14,7 +14,7 @@ public:
 	explicit P1S_Scene(std::string name) : Scene(std::move(name)) {}
 
 	void init() override {
-		_particle = new Particle(INI_POS, INI_VEL);
+		_particle = new Particle(INI_POS, INI_VEL, INI_ACC, INI_DUMP);
 	}
 
 	void update(double dt) override {
@@ -25,7 +25,6 @@ public:
 		if (key == 'r' || key == 'R') {
 			//m_transform.p = physx::PxVec3(0.0f, 10.0f, 0.0f); // Reset
 		}
-
 	}
 
 	void cleanup() override {
@@ -43,7 +42,9 @@ public:
 private:
 	Particle* _particle;
 	const Vector3D INI_POS = Vector3D();
-	const Vector3D INI_VEL = Vector3D(5.f, 0.f, 0.f);
+	const Vector3D INI_VEL = Vector3D(10.f, 5.f, 0.f);
+	const Vector3D INI_ACC = Vector3D(2.f, 0.f, 0.f);
+	static constexpr double INI_DUMP = 0.90;
 	std::unordered_map<TransformKey, physx::PxTransform> m_transforms;
 	std::vector<RenderItem*> m_renderItems;
 

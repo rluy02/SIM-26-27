@@ -4,9 +4,8 @@
 class Particle
 {
 public:
-	Particle(const Vector3D& pos, const Vector3D& vel);
+	explicit Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, double damping = 1.00);
 	~Particle();
-
 	void integrate(double t);
 private:
 	void explicitEuler(double t);
@@ -14,8 +13,10 @@ private:
 	void semiExplicitEuler(double t);
 	void verlet(double t);
 private:
-
 	Vector3D _vel;
+	Vector3D _acc;
+	double _damping; //dumping
+	Vector3D _prevPos; //para verlet
 	physx::PxTransform _pos;
 	RenderItem* _renderItem;
 };
