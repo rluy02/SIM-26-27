@@ -43,9 +43,13 @@ public:
 	}
 
 	// mult by constant
-	inline Vector3D operator*(float d) const
+	friend inline Vector3D operator*(const Vector3D& v, float d) //por der (es global pero "v" sigue siendo const)
 	{
-		return Vector3D(x * d, y * d, z * d);
+		return Vector3D(v.x * d, v.y * d, v.z * d);
+	}
+	friend inline Vector3D operator*(float d,const Vector3D& v) //por izq
+	{
+		return v * d; //llamada al metodo de mult. por derecha
 	}
 
 	// division by constant (scaling)
@@ -79,7 +83,7 @@ public:
 	inline Vector3D normalize() const
 	{
 		float m = magnitude();
-		assert(m > 0.000001f, "An operation is attempting to divide by zero."); // extra para saber si se divide entre 0
+		assert(m > 0.000001f && "An operation is attempting to divide by zero."); // extra para saber si se divide entre 0
 		if (m <= 0.000001f)
 			return Vector3D(); // empty
 		return *this / m;

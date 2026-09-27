@@ -107,7 +107,7 @@ private:
 		float t = 0.f;
 		for (int i = 0;i < 10;i++) {
 
-			Vector3D P_t = (B - A) * t + A; //interpolacion (puesto asi porque el operador recibe Vector * escalar)
+			Vector3D P_t = A + t * (B - A); //interpolacion
 			t += 0.1f; //incr
 			m_transforms.insert({ "m_transform" + i, physx::PxTransform(P_t) });
 			m_renderItems.emplace_back(new RenderItem(shape, &m_transforms.at("m_transform" + i), Vector4(0.f, 0.f, 0.f, 1.f)));

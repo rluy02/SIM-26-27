@@ -4,14 +4,20 @@
 class Particle
 {
 public:
-	Particle(Vector3D Pos, Vector3D);
+	Particle(const Vector3D& pos, const Vector3D& vel);
 	~Particle();
 
 	void integrate(double t);
 private:
-	Vector3D vel;
-	physx::PxTransform pose;
-	RenderItem* renderItem;
+	void explicitEuler(double t);
+	//Opcional
+	void semiExplicitEuler(double t);
+	void verlet(double t);
+private:
+
+	Vector3D _vel;
+	physx::PxTransform _pos;
+	RenderItem* _renderItem;
 };
 
 /*Notas: Mantener referencias para poder avanzar en step las fisicas (se instancia en el init lo basico)*/
