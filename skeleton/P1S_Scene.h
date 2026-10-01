@@ -42,9 +42,9 @@ public:
 private:
 	Particle* _particle;
 	const Vector3D INI_POS = Vector3D();
-	const Vector3D INI_VEL = Vector3D(10.f, 5.f, 0.f);
-	const Vector3D INI_ACC = Vector3D(2.f, 0.f, 0.f);
-	static constexpr double INI_DUMP = 0.90;
+	const Vector3D INI_VEL = Vector3D(30.f, 0.f, 0.f);
+	const Vector3D INI_ACC = Vector3D(-2.f, 0.f, 0.f);
+	static constexpr double INI_DUMP = 0.80;
 	std::unordered_map<TransformKey, physx::PxTransform> m_transforms;
 	std::vector<RenderItem*> m_renderItems;
 

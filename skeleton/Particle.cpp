@@ -1,4 +1,5 @@
 #include "Particle.h"
+#include "SimulationConfig.h"
 #include <iostream>
 
 Particle::Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, double damping)
@@ -6,7 +7,9 @@ Particle::Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc
 {
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(10.0f)); //referencia compartida
 	_pos = physx::PxTransform(pos);
-	_prevPos = pos - vel * (1.0 / 60.0); // posi-1=pos0-vel0*dt  (esto es una estimacion)
+	const double dt = simulation::fixedTimestep;
+	//x(t - dt) = x(t) - v(t)dt + 0.5 *a(t)dt^2   ... pos-1(-dt) desarrollo de taylor de orden 2
+	_prevPos = (pos - vel) * dt + 0.5 * _acc * dt * dt;
 	_renderItem = new RenderItem(shape, &_pos, Vector4(0.f, 1.f, 1.f, 1.f));
 	shape->release();
 }
@@ -18,37 +21,39 @@ Particle::~Particle()
 
 void Particle::integrate(double t)
 {
-	semiExplicitEuler(t);
+	verlet(t);
 }
 void Particle::explicitEuler(double t)
 {
 	// xi + h · vi
 	// vi + h · ai
 	_pos.p = _pos.p + t * _vel;
-	_vel = (_vel + t * _acc) * std::pow(_damping, t);
+	const double dampingFactor = std::pow(_damping, t);
+	_vel = (_vel + t * _acc) * dampingFactor;
 
 }
 void Particle::semiExplicitEuler(double t) //Actualiza velocidad antes que la posicion (más preciso y estable)
 {
 	//vi + 1 = vi + h · ai
 	//xi + 1 = xi + h · vi + 1
-	_vel = (_vel + t * _acc) * std::pow(_damping, t); // damping(d ^ dt)
+	const double dampingFactor = std::pow(_damping, t);
+	_vel = (_vel + t * _acc) * dampingFactor; // damping(d ^ dt)
 	_pos.p = _pos.p + t * _vel;
 	//std::cout << _vel << std::endl;
 
 }
-void Particle::verlet(double t) //Va mucho más rapido, falta revisar que sucede
+void Particle::verlet(double t)
 {
 	Vector3D currentPos = _pos.p;
-	//xi + 1 = 2xi − xi−1 + h^2· ai
 	Vector3D displacement = currentPos - _prevPos;
-	Vector3D nextPos = _pos.p + displacement * std::pow(_damping, t) + (t * t) * _acc;
-	
+	const double dampingFactor = std::pow(_damping, t);
+	Vector3D nextPos = currentPos + displacement * dampingFactor + _acc * (t * t);
+
 	_prevPos = currentPos; // La actual pasa a ser la anterior
 	_pos.p = nextPos;
 }
 
 /*Nota.
-A un damping de 0.90 significa un 10% de velocidad total (acumulada) que se pierde en cada fotograma.
+A un damping de 0.90 significa un 10% de velocidad total (acumulada) que se pierde en cada segundo.
 Es decir, la velocidad aumenta o disminuye hasta que el damping quita la misma cantidad de valor que añade la aceleracion, que es cuando se "capa"
 */

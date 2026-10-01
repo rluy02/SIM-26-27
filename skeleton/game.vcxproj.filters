@@ -31,6 +31,9 @@
     <ClInclude Include="P0S_Scene.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="P1S_Scene.h" />
+    <ClInclude Include="SimulationConfig.h">
+      <Filter>Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

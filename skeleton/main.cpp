@@ -17,6 +17,7 @@
 #include "core.hpp"
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
+#include "SimulationConfig.h"
 
 #include <iostream>
 // Para las escenas del curso, se incluyen los headers de las prácticas y la escena vacía
@@ -53,7 +54,7 @@ ContactReportCallback gContactReportCallback;
 
 // Global variables for physics timing. We use a fixed timestep for physics simulation, and accumulate time to determine when to step the physics simulation.
 double gPhysicsTimeAccumulator = 0.0;
-const double gFixedTimestep = 1.0 / 60.0;
+const double gFixedTimestep = simulation::fixedTimestep;
 
 
 void initPhysics(bool interactive)
@@ -130,10 +131,12 @@ void stepPhysics(bool interactive, double t)
 		// fetchResults(true) bloquea el hilo de renderizado hasta que la física termine.
 		// En prácticas avanzadas es vital para que el renderizado no lea datos corruptos.
 		gScene->fetchResults(true);
+		SceneManager::instance().update(gFixedTimestep);
 
 		gPhysicsTimeAccumulator -= gFixedTimestep;
 	}
-	SceneManager::instance().update(t);
+	// Nota: la actualización de la escena ya se realiza en cada subpaso fijo arriba.
+	//SceneManager::instance().update(t); comentado para arreglar verlet
 }
 
 
