@@ -13,6 +13,7 @@
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Particle.cpp" />
+    <ClCompile Include="Projectile.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -34,6 +35,8 @@
     <ClInclude Include="SimulationConfig.h">
       <Filter>Render</Filter>
     </ClInclude>
+    <ClInclude Include="Projectile.h" />
+    <ClInclude Include="P2S_Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

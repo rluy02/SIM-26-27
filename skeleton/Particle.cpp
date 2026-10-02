@@ -2,8 +2,8 @@
 #include "SimulationConfig.h"
 #include <iostream>
 
-Particle::Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, double damping)
-	: _vel(vel), _acc(acc), _damping(damping)
+Particle::Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const double mass, const double damping)
+	: _vel(vel), _acc(acc), _mass(mass), _damping(damping)
 {
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(10.0f)); //referencia compartida
 	_pos = physx::PxTransform(pos);
@@ -39,7 +39,6 @@ void Particle::semiExplicitEuler(double t) //Actualiza velocidad antes que la po
 	const double dampingFactor = std::pow(_damping, t);
 	_vel = (_vel + t * _acc) * dampingFactor; // damping(d ^ dt)
 	_pos.p = _pos.p + t * _vel;
-	//std::cout << _vel << std::endl;
 
 }
 void Particle::verlet(double t)
@@ -51,6 +50,15 @@ void Particle::verlet(double t)
 
 	_prevPos = currentPos; // La actual pasa a ser la anterior
 	_pos.p = nextPos;
+}
+
+void Particle::showParamsDebug() {
+	std::cout << "Posicion: " << Vector3D(_pos.p) << std::endl;
+	std::cout << "Velocidad: " << _vel << std::endl;
+	std::cout << "Aceleracion: " << _acc << std::endl;
+	std::cout << "Masa: " << _mass << std::endl;
+	std::cout << "Dumping: " << _damping << std::endl;
+
 }
 
 /*Nota.

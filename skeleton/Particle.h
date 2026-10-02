@@ -4,17 +4,19 @@
 class Particle
 {
 public:
-	explicit Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, double damping = 1.00);
-	~Particle();
-	void integrate(double t);
+	explicit Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const double mass, const double damping = 1.00);
+	virtual ~Particle();
+	virtual void integrate(double t);
+	void showParamsDebug();
 private:
 	void explicitEuler(double t);
 	//Opcional
 	void semiExplicitEuler(double t);
 	void verlet(double t);
-private:
+protected:
 	Vector3D _vel;
 	Vector3D _acc;
+	double _mass;
 	double _damping; //dumping
 	Vector3D _prevPos; //para verlet
 	physx::PxTransform _pos;
