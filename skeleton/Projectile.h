@@ -3,14 +3,10 @@
 class Projectile : public Particle
 {
 public:
-	explicit Projectile(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, bool shootFromCamera, const double mass = 0.0075, const double damping = 1.00);
-
+	explicit Projectile(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const double mass = 0.0075, const double damping = 1.00,
+		const float pSize = 10.f, const Vector4& color = Vector4(0.f, 1.f, 1.f, 1.f));
+	//quizas conviene luego guardar el inverso de la masa (para el gen de fuerzas)
 public:
-	inline void modifyMass(double valAccAdded) { _mass += valAccAdded; };
-	void modifyVelocity(double valAccAdded);
-	inline bool WasShootFromCamera() const { return _shootFromCamera; };
-private:
-	bool _shootFromCamera = false;
 	//Masa real promedio: 0.0075kg = 7.5g
 	//Velocidad real promedio: 340m/s
 };

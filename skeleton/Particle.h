@@ -4,7 +4,8 @@
 class Particle
 {
 public:
-	explicit Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const double mass, const double damping = 1.00);
+	explicit Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const double mass, const double damping = 1.00,
+		const float pSize = 10.f, const Vector4& color = Vector4(0.f, 1.f, 1.f, 1.f));
 	virtual ~Particle();
 	virtual void integrate(double t);
 	void showParamsDebug();
@@ -22,9 +23,5 @@ protected:
 	physx::PxTransform _pos;
 	RenderItem* _renderItem;
 };
-
-/*Notas: Mantener referencias para poder avanzar en step las fisicas (se instancia en el init lo basico)*/
-/*P1.1 para la semana que viene*/
-/*Aplicar velocidad constante, pero en prox practs solo la velocidad puede ser modificada por la aceleracion y la aceleracion por la fuerza*/
 
 

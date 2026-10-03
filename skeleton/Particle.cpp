@@ -2,15 +2,15 @@
 #include "SimulationConfig.h"
 #include <iostream>
 
-Particle::Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const double mass, const double damping)
+Particle::Particle(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const double mass, const double damping, const float pSize, const Vector4& color)
 	: _vel(vel), _acc(acc), _mass(mass), _damping(damping)
 {
-	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(10.0f)); //referencia compartida
+	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(pSize));//referencia compartida
 	_pos = physx::PxTransform(pos);
 	const double dt = simulation::fixedTimestep;
 	//x(t - dt) = x(t) - v(t)dt + 0.5 *a(t)dt^2   ... pos-1(-dt) desarrollo de taylor de orden 2
-	_prevPos = (pos - vel) * dt + 0.5 * _acc * dt * dt;
-	_renderItem = new RenderItem(shape, &_pos, Vector4(0.f, 1.f, 1.f, 1.f));
+	_prevPos = pos - vel * dt + 0.5 * _acc * dt * dt;
+	_renderItem = new RenderItem(shape, &_pos, color);
 	shape->release();
 }
 
@@ -62,6 +62,6 @@ void Particle::showParamsDebug() {
 }
 
 /*Nota.
-A un damping de 0.90 significa un 10% de velocidad total (acumulada) que se pierde en cada segundo.
-Es decir, la velocidad aumenta o disminuye hasta que el damping quita la misma cantidad de valor que añade la aceleracion, que es cuando se "capa"
+A un damping de 0.90 significa que la particula pierde un 10% de su velocidad cada segundo.
+Es decir, la velocidad aumenta/disminuye hasta que el damping quita la misma cantidad de valor que añade la aceleracion, que es cuando se "capa" (velocidad terminal)
 */
