@@ -301,6 +301,26 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 
 	glColor4f(0.4f, 0.4f, 0.4f, 1.0f);
 
+	// Ejes (despues del setup de la camara)
+	glBegin(GL_LINES);
+
+	// Eje X: rojo
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(400.0f, 0.0f, 0.0f);
+
+	// Eje Y: verde
+	glColor3f(0.0f, 1.0f, 0.0f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 400.0f, 0.0f);
+
+	// Eje Z: azul
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glVertex3f(0.0f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.0f, 400.0f);
+
+	glEnd();
+
 	assert(glGetError() == GL_NO_ERROR);
 }
 
