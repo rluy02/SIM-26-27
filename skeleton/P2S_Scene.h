@@ -23,7 +23,7 @@ struct ProjectileType {
 
 	ProjectileType(std::string n, double rm, double rv, double rg, double sv, double d, float s, const Vector4& c)
 		: name(std::move(n)), rMass(rm), rVel(rv), rGrav(rg), sVel(sv), damping(d), size(s), color(c) {
-		updateSimulated();
+		updateSimulated(); //CALCULO DE ESCALADO AL CREARSE
 	}
 
 	void updateSimulated() {
@@ -49,7 +49,7 @@ public:
 		const Vector4 r(1, 0, 0, 1);
 		const Vector4 g(0, 1, 0, 1);
 		const Vector4 b(0, 0, 1, 1);
-		//nombre, rMass, rVel, rGrav, sVel, damping
+		//nombre, rMass, rVel, rGrav, sVel, damping, size, color
 		_projsTypes.emplace_back("Bala", 0.0075, 340.0, simulation::worldGravityY, 30.0, 1.0, 2.f, r);
 		_projsTypes.emplace_back("Bola de canon", 5.0, 300.0, simulation::worldGravityY, 40.0, 1.0, 6.f, g);
 		_projsTypes.emplace_back("Globo de helio", 0.003, 5.0, 2.0, 5.0, 0.9, 12.f, b);
