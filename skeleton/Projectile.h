@@ -3,7 +3,7 @@
 class Projectile : public Particle
 {
 public:
-	explicit Projectile(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const double mass = 0.0075, const double damping = 1.00,
+	explicit Projectile(const Vector3D& pos, const Vector3D& vel, const Vector3D& acc, const float mass = 0.0075f, const float damping = 1.00f,
 		const float pSize = 10.f, const Vector4& color = Vector4(0.f, 1.f, 1.f, 1.f));
 	//quizas conviene luego guardar el inverso de la masa (para el gen de fuerzas)
 public:

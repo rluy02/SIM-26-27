@@ -16,7 +16,7 @@ public:
 	}
 
 	void update(double dt) override {
-		_particle->integrate(dt);
+		_particle->integrateVerlet(dt);
 	}
 
 	void keyPress(unsigned char key, const physx::PxTransform& camera) override {
