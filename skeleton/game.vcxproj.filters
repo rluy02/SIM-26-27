@@ -42,6 +42,7 @@
     <ClInclude Include="P3S_Scene.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ParticleGenerator.h" />
+    <ClInclude Include="P4S_Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

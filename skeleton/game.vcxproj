@@ -281,6 +281,7 @@
     <ClInclude Include="P1S_Scene.h" />
     <ClInclude Include="P2S_Scene.h" />
     <ClInclude Include="P3S_Scene.h" />
+    <ClInclude Include="P4S_Scene.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleGenerator.h" />
     <ClInclude Include="ParticleSystem.h" />
