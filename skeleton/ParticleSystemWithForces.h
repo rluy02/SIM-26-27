@@ -1,7 +1,7 @@
 #pragma once
 #include <array>
 #include "ParticleGenerator.h" 
-#include "GravityGenerator.h"
+#include "ParticleForceRegistry.h"
 
 //Nota: En esta version se hace uso de AoS para aprovechar la impl. de la particula con fuerza y depurar facilmente
 class ParticleSystemWithForces {
@@ -10,6 +10,7 @@ public:
 	~ParticleSystemWithForces();
 
 	void update(double t);
+	void addForceGenerator(ForceGenerator* generator); //pueden ser muchos que se agregaran al registro
 private:
 	void generateParticles();
 	void spawn(const ParticleSample& s);
@@ -17,7 +18,7 @@ private:
 private:
 	ParticleGenerator _particleGen;
 	Vector3D _centerEmitter;
-	GravityGenerator _gravity;
+	ParticleForceRegistry _registry;
 
 	static constexpr size_t _MAX_PARTICLES = 5000;
 	static constexpr float RADIUS_LIMIT = 50.f;

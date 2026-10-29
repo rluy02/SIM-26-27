@@ -5,8 +5,8 @@ class ParticleWithForces;
 class ForceGenerator {
 public:
 	virtual ~ForceGenerator() {};
-protected:
 	virtual void updateForce(ParticleWithForces* particle, float dt) = 0;
+protected:
 	Vector3D _force;
 };
 

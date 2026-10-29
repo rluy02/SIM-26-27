@@ -15,6 +15,7 @@ struct EmitterConfig {
 	Vector3D pos{ 0.f, 0.f, 0.f }, posSigma{ 0.f, 0.f, 0.f };  // media y desviacion por eje (>= 0)
 	Vector3D vel{ 0.f, 0.f, 0.f }, velSigma{ 0.f, 0.f, 0.f };
 	Vector3D gravity = Vector3D(0.f, simulation::systemWorldGravityY, 0.f); //por default la gravedad base
+	float mass = 1.f; //para poder configurar el sistema comodamente
 	float lifeMin = 1.f, lifeMax = 3.f;                        // segundos. Uniforme en [lifeMin, lifeMax)
 	float meanPerFrame = 1.f, varPerFrame = 0.f;
 	float damping = 1.f;

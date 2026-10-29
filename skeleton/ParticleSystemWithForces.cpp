@@ -3,8 +3,7 @@
 
 ParticleSystemWithForces::ParticleSystemWithForces(const EmitterConfig& cfg)
 	: _particleGen(cfg),
-	_centerEmitter(cfg.pos),
-	_gravity(cfg.gravity) {
+	_centerEmitter(cfg.pos) {
 }
 
 
@@ -30,7 +29,7 @@ void ParticleSystemWithForces::spawn(const ParticleSample& s) {
 	_particles[_alive] = new ParticleWithForces(
 		s.pos,
 		s.vel,
-		100.f,          // Masa provisional para probar
+		cfg.mass,
 		cfg.damping,
 		cfg.size,
 		cfg.color
@@ -71,9 +70,15 @@ void ParticleSystemWithForces::update(double dt) {
 			kill(i);
 			continue;
 		}
+
 		p->clearForces(); //Limp fuerzas
-		_gravity.updateForce(p, static_cast<float>(dt)); //Calc y acumular fuerzas
+		_registry.applyForces(p, static_cast<float>(dt)); //Calc y acumular fuerzas a los generadores correspondientes
 		p->integrateSEE(dt); //integrar estado y actualizar pos,vels
+
 		i++;
 	}
+}
+
+void ParticleSystemWithForces::addForceGenerator(ForceGenerator* generator) {
+	_registry.add(generator);
 }
