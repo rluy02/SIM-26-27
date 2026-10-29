@@ -1,9 +1,12 @@
 #pragma once
+#include "Vector3D.h"
 
+class ParticleWithForces;
 class ForceGenerator {
 public:
 	virtual ~ForceGenerator() {};
 protected:
+	virtual void updateForce(ParticleWithForces* particle, float dt) = 0;
 	Vector3D _force;
 };
 

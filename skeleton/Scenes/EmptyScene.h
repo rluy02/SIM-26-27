@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Scene.h"
-#include "RenderUtils.hpp"
 #include <vector>
+#include "Scene.h"
+#include "../RenderUtils.hpp"
 
 class EmptyScene : public Scene {
 public:

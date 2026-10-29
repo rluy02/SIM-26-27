@@ -10,12 +10,14 @@
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="callbacks.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Scenes\SceneManager.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="ParticleWithForces.cpp" />
     <ClCompile Include="ParticleGenerator.cpp" />
+    <ClCompile Include="ParticleSystemWithForces.cpp" />
+    <ClCompile Include="GravityGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -27,22 +29,27 @@
     </ClInclude>
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="callbacks.hpp" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="EmptyScene.h" />
+    <ClInclude Include="Scenes\Scene.h" />
+    <ClInclude Include="Scenes\SceneManager.h" />
+    <ClInclude Include="Scenes\EmptyScene.h" />
     <ClInclude Include="Vector3D.h" />
-    <ClInclude Include="P0S_Scene.h" />
+    <ClInclude Include="Scenes\P0S_Scene.h" />
     <ClInclude Include="Particle.h" />
-    <ClInclude Include="P1S_Scene.h" />
+    <ClInclude Include="Scenes\P1S_Scene.h" />
     <ClInclude Include="SimulationConfig.h">
       <Filter>Render</Filter>
     </ClInclude>
     <ClInclude Include="Projectile.h" />
-    <ClInclude Include="P2S_Scene.h" />
-    <ClInclude Include="P3S_Scene.h" />
+    <ClInclude Include="Scenes\P2S_Scene.h" />
+    <ClInclude Include="Scenes\P3S_Scene.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ParticleGenerator.h" />
-    <ClInclude Include="P4S_Scene.h" />
+    <ClInclude Include="Scenes\P4S_Scene.h" />
+    <ClInclude Include="ForceGenerator.h" />
+    <ClInclude Include="ParticleWithForces.h" />
+    <ClInclude Include="GravityGenerator.h" />
+    <ClInclude Include="ParticleSystemWithForces.h" />
+    <ClInclude Include="ParticleForceRegistry.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

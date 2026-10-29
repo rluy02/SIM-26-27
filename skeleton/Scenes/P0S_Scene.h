@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Scene.h"
-#include "RenderUtils.hpp"
-#include "Vector3D.h"
 #include <vector>
 #include <unordered_map>
+#include "Scene.h"
+#include "../RenderUtils.hpp"
+#include "../Vector3D.h"
 
 using TransformKey = std::string;
 

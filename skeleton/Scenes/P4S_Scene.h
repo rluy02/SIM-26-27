@@ -1,11 +1,12 @@
 #pragma once
 
-#include "Scene.h"
-#include "RenderUtils.hpp"
-#include "Vector3D.h"
 #include <vector>
 #include <algorithm>
-#include "ParticleGenerator.h"
+#include "Scene.h"
+#include "../RenderUtils.hpp"
+#include "../Vector3D.h"
+#include "../ParticleGenerator.h"
+#include "../ParticleSystemWithForces.h"
 
 using TransformKey = std::string;
 

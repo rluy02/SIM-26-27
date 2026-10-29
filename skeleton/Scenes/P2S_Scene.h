@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Scene.h"
-#include "RenderUtils.hpp"
-#include "Vector3D.h"
 #include <vector>
 #include <algorithm>
-#include "Projectile.h"
+#include "Scene.h"
+#include "../RenderUtils.hpp"
+#include "../Vector3D.h"
+#include "../Projectile.h"
 
 using TransformKey = std::string;
 

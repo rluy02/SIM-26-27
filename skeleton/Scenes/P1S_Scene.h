@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Scene.h"
-#include "RenderUtils.hpp"
-#include "Vector3D.h"
-#include "Particle.h"
+#include "../RenderUtils.hpp"
+#include "../Vector3D.h"
+#include "../Particle.h"
 
 using TransformKey = std::string;
 

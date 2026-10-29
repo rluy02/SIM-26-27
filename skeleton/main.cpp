@@ -21,13 +21,13 @@
 
 #include <iostream>
 // Para las escenas del curso, se incluyen los headers de las prácticas y la escena vacía
-#include "SceneManager.h"
-#include "EmptyScene.h"
-#include "P0S_Scene.h"
-#include "P1S_Scene.h"
-#include "P2S_Scene.h"
-#include "P3S_Scene.h"
-#include "P4S_Scene.h"
+#include "Scenes/SceneManager.h"
+#include "Scenes/EmptyScene.h"
+#include "Scenes/P0S_Scene.h"
+#include "Scenes/P1S_Scene.h"
+#include "Scenes/P2S_Scene.h"
+#include "Scenes/P3S_Scene.h"
+#include "Scenes/P4S_Scene.h"
 
 #include <foundation/PxSimpleTypes.h>
 #include <PxPhysicsVersion.h> // <- Macros for PhysX version checking
