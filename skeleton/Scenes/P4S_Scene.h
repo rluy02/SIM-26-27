@@ -8,6 +8,7 @@
 #include "../ParticleGenerator.h"
 #include "../ParticleSystemWithForces.h"
 #include "../GravityGenerator.h"
+#include "../WindGenerator.h"
 
 using TransformKey = std::string;
 
@@ -17,32 +18,24 @@ public:
 
 	void init() override {
 		//Emisores-- Prueba de diferentes masas
-		EmitterConfig cfg1 = sample();
-		cfg1.mass = 1.f; //es la default
-		cfg1.gravity = Vector3D(0.f, -9.81f, 0.f);
-		cfg1.pos = Vector3D(-5.f, 0.f, 0.f);
+		//Nota: a igual masa mismo tamaño se deja llevar mas la de mayor tamaño porque ofrece mas area de contacto con el viento
+		//ejemplo: globo vs pelota
+		EmitterConfig ball = sample();
+		ball.mass = 1.f; //es la default
+		ball.gravity = Vector3D(0.f, -9.81f, 0.f);
+		ball.pos = Vector3D(-5.f, 0.f, 0.f);
+		ball.size = 0.1f;
 
-		EmitterConfig cfg2 = sample();
-		cfg2.mass = 100.f;
-		cfg2.gravity = Vector3D(0.f, -9.81f, 0.f);
-		cfg2.pos = Vector3D(5.f, 0.f, 0.f);
-		cfg2.color = Vector4(0.5f, 0.5f, 0.5f, 1.f);
+		EmitterConfig balloon = sample();
+		balloon.mass = 1.f;
+		balloon.gravity = Vector3D(0.f, -9.81f, 0.f);
+		balloon.pos = Vector3D(5.f, 0.f, 0.f);
+		balloon.color = Vector4(0.5f, 0.5f, 0.5f, 1.f);
+		balloon.size = 0.5f;
 
-		//Generadores
-		_gravity = new GravityGenerator();
-		_megaGravity = new GravityGenerator(Vector3D(0.f, -30.f, 0.f));
-		_forceGenerators.push_back(_gravity);
-		_forceGenerators.push_back(_megaGravity);
 
-		///Sistemas
-		_systems.emplace_back(new ParticleSystemWithForces(cfg1));
-		_systems.emplace_back(new ParticleSystemWithForces(cfg2));
-
-		//registrar fuerzas
-		_systems[0]->addForceGenerator(_gravity);
-		_systems[0]->addForceGenerator(_gravity); //2 veces la gravedad
-
-		_systems[1]->addForceGenerator(_megaGravity);
+		//pruebaGravedad(cfg1, cfg2);
+		pruebaViento(ball, balloon); //la cfg1 le afectara mas el viento por su peso
 
 	}
 
@@ -65,11 +58,38 @@ public:
 		_forceGenerators.clear();
 	}
 private:
+	void pruebaGravedad(const EmitterConfig& cfg1, const EmitterConfig& cfg2) {
+		_gravity = new GravityGenerator();
+		_megaGravity = new GravityGenerator(Vector3D(0.f, -30.f, 0.f));
+		_forceGenerators.push_back(_gravity);
+		_forceGenerators.push_back(_megaGravity);
+
+		///Sistemas
+		_systems.emplace_back(new ParticleSystemWithForces(cfg1));
+		_systems.emplace_back(new ParticleSystemWithForces(cfg2));
+		//registrar fuerzas
+		_systems[0]->addForceGenerator(_gravity);
+		_systems[1]->addForceGenerator(_megaGravity);
+	};
+	void pruebaViento(const EmitterConfig& cfg1, const EmitterConfig& cfg2) {
+		//Viento
+		_wind = new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg1.size/2.f);
+		_wind2 = new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg2.size/2.f);
+		_forceGenerators.push_back(_wind);
+		_forceGenerators.push_back(_wind2);
+		///Sistemas
+		_systems.emplace_back(new ParticleSystemWithForces(cfg1));
+		_systems.emplace_back(new ParticleSystemWithForces(cfg2));
+		//registrar fuerzas
+		_systems[0]->addForceGenerator(_wind);
+		_systems[1]->addForceGenerator(_wind2);
+	};
 	EmitterConfig sample() {
 		EmitterConfig sample;
 		sample.pos = Vector3D(0.f, 0.f, 0.f);
+		sample.posSigma = Vector3D(2.f, 0.f, 2.f);
 		sample.vel = Vector3D(0.f, 10.f, 0.f);
-		sample.velSigma = Vector3D(0, 0, 0); //Para probar que caeran al mismo punto todas
+		sample.velSigma = Vector3D(0, 3.f, 0); //Para probar que caeran al mismo punto todas
 		sample.lifeMin = 3.5f; sample.lifeMax = 8.5f;
 		sample.meanPerFrame = 3.f; sample.varPerFrame = 2.f;
 		sample.size = 1.5f;
@@ -80,4 +100,5 @@ private:
 	std::vector<ParticleSystemWithForces*> _systems;
 	std::vector< ForceGenerator*> _forceGenerators; //para no tener que eliminar manualmente
 	GravityGenerator* _gravity, * _megaGravity;
+	WindGenerator* _wind, * _wind2;
 };

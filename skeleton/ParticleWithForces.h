@@ -16,6 +16,7 @@ public:
 	void clearForces();
 	void addForce(const Vector3D& force);
 	inline float getMass() const { return _mass; };
+	inline Vector3D getVel() const { return _vel; };
 	inline const Vector3D& getPosition() const {return _pos.p;}
 private:
 	void semiExplicitEuler(float t);
