@@ -21,7 +21,7 @@ private:
 	ParticleForceRegistry _registry;
 
 	static constexpr size_t _MAX_PARTICLES = 5000;
-	static constexpr float RADIUS_LIMIT = 50.f;
+	static constexpr float RADIUS_LIMIT = 75.f;
 	static constexpr float  RADIUS_LIMIT_SQ = RADIUS_LIMIT * RADIUS_LIMIT;
 	static constexpr float LIFE_TIME_LIMIT = 0.f;
 

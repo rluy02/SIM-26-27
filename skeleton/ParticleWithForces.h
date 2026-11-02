@@ -17,7 +17,8 @@ public:
 	void addForce(const Vector3D& force);
 	inline float getMass() const { return _mass; };
 	inline Vector3D getVel() const { return _vel; };
-	inline const Vector3D& getPosition() const {return _pos.p;}
+	inline const Vector3D& getPosition() const { return _pos.p; }
+	inline const float getSize() const { return _radius; } //radius
 private:
 	void semiExplicitEuler(float t);
 	void verlet(float t);
@@ -26,7 +27,8 @@ protected:
 	Vector3D _f;
 	float _mass;
 	float _invMass;//w
-	float _damping; //dumping
+	float _damping; //damping
+	float _radius;
 	float _dampingFactor;
 	Vector3D _prevPos; //para verlet
 	physx::PxTransform _pos;

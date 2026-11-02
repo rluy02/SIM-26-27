@@ -9,6 +9,7 @@
 #include "../ParticleSystemWithForces.h"
 #include "../GravityGenerator.h"
 #include "../WindGenerator.h"
+#include "../WhirlwindGenerator.h"
 
 using TransformKey = std::string;
 
@@ -33,9 +34,9 @@ public:
 		balloon.color = Vector4(0.5f, 0.5f, 0.5f, 1.f);
 		balloon.size = 0.5f;
 
-
 		//pruebaGravedad(cfg1, cfg2);
-		pruebaViento(ball, balloon); //la cfg1 le afectara mas el viento por su peso
+		//pruebaViento(ball, balloon); //la cfg1 le afectara mas el viento por su peso
+		pruebaTorbellino(sampleWhirl());
 
 	}
 
@@ -73,8 +74,8 @@ private:
 	};
 	void pruebaViento(const EmitterConfig& cfg1, const EmitterConfig& cfg2) {
 		//Viento
-		_wind = new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg1.size/2.f);
-		_wind2 = new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg2.size/2.f);
+		_wind = new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg1.size);
+		_wind2 = new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg2.size);
 		_forceGenerators.push_back(_wind);
 		_forceGenerators.push_back(_wind2);
 		///Sistemas
@@ -83,6 +84,18 @@ private:
 		//registrar fuerzas
 		_systems[0]->addForceGenerator(_wind);
 		_systems[1]->addForceGenerator(_wind2);
+	};
+
+	void pruebaTorbellino(const EmitterConfig& cfg1) {
+		//se debilita la velocidad vertical mientras sube, a partir de 30.f se iran reduciendo
+		//el radio de influencia del torbellino es 20*20.f
+		_whirl = new WhirlwindGenerator(Vector3D(0.f, 0.f, 0.f), cfg1.size, 20.f, 30.f, 1.f); //default en el centro del mundo
+		_gravity = new GravityGenerator();
+		_forceGenerators.push_back(_whirl);
+		_forceGenerators.push_back(_gravity);
+		_systems.emplace_back(new ParticleSystemWithForces(cfg1));
+		_systems[0]->addForceGenerator(_whirl);
+		//_systems[0]->addForceGenerator(_gravity);
 	};
 	EmitterConfig sample() {
 		EmitterConfig sample;
@@ -96,9 +109,24 @@ private:
 		sample.color = Vector4(0.f, 1.0f, 1.f, 1.f);
 		return sample;
 	};
+	EmitterConfig sampleWhirl() {
+		EmitterConfig tornado;
+		tornado.pos = Vector3D(0.f, 0.f, 0.f);
+		tornado.posSigma = Vector3D(5.5f, 0.f, 5.5f);
+		tornado.vel = Vector3D(0.f, 2.f, 0.f);
+		tornado.velSigma = Vector3D(0.5f, 1.f, 0.5f);
+		tornado.meanPerFrame = 15.f;
+		tornado.varPerFrame = 3.f;
+		tornado.lifeMin = 10.5f; tornado.lifeMax = 20.5f;
+		tornado.size = 0.15f;
+		tornado.mass = 0.2f;
+		//tornado.gravity = Vector3D(0.f, -9.81f, 0.f);
+		return tornado;
+	};
 private:
 	std::vector<ParticleSystemWithForces*> _systems;
 	std::vector< ForceGenerator*> _forceGenerators; //para no tener que eliminar manualmente
 	GravityGenerator* _gravity, * _megaGravity;
 	WindGenerator* _wind, * _wind2;
+	WhirlwindGenerator* _whirl;
 };

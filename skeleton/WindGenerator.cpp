@@ -4,8 +4,8 @@
 #include "ParticleWithForces.h"
 
 
-WindGenerator::WindGenerator(const Vector3D& vel, float radius, float densidad, float viscosidad, float coefArraste)
-	: _vel(vel), _r(radius), _densidadAire(densidad), _viscosidadAire(viscosidad), _coefArraste(coefArraste) {
+WindGenerator::WindGenerator(const Vector3D& vel, float pRadius, float densidad, float viscosidad, float coefArraste)
+	: _vel(vel), _r(pRadius), _densidadAire(densidad), _viscosidadAire(viscosidad), _coefArraste(coefArraste) {
 
 	_k1 = 6.f * static_cast<float>(M_PI) * _viscosidadAire * _r;
 	//para k2
@@ -16,7 +16,8 @@ WindGenerator::WindGenerator(const Vector3D& vel, float radius, float densidad, 
 void WindGenerator::updateForce(ParticleWithForces* p, float dt) {
 	assert(p != nullptr);
 
-	const Vector3D vRel = _vel - p->getVel(); //imp este orden
+	const Vector3D windVelocity = getWindVelocity(p); //para el torbellino se necesita la posi de la particula
+	const Vector3D vRel = windVelocity - p->getVel(); //imp este orden
 	const Vector3D fLineal = _k1 * vRel;
 
 	//Calculo de newton

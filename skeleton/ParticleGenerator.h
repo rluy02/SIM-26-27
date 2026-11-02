@@ -19,7 +19,7 @@ struct EmitterConfig {
 	float lifeMin = 1.f, lifeMax = 3.f;                        // segundos. Uniforme en [lifeMin, lifeMax)
 	float meanPerFrame = 1.f, varPerFrame = 0.f;
 	float damping = 1.f;
-	float size = 0.5f;                                         // constante por emisor (esfera compartida)
+	float size = 0.5f;                                         // constante por emisor (esfera compartida). Es el radio
 	Vector4 color{ 1.f, 1.f, 1.f, 1.f };
 };
 

@@ -6,9 +6,10 @@
 class WindGenerator :public ForceGenerator {
 public:
 	//Predeterminado que use los params de referencia del aire
-	explicit class WindGenerator(const Vector3D& vel, float radius, float densidad = 1.225f, float viscosidad = 1.81e-5f
+	explicit class WindGenerator(const Vector3D& vel, float pRadius, float densidad = 1.225f, float viscosidad = 1.81e-5f
 		, float coefArraste = 0.47f);
 	void updateForce(ParticleWithForces* p, float dt) override;
+	virtual Vector3D getWindVelocity(const ParticleWithForces* p) const { return _vel; };
 private:
 	Vector3D _vel;
 	float _k1, _k2;
