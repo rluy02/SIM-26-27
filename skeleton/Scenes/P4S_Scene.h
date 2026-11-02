@@ -44,7 +44,9 @@ public:
 		//----Ejemplo Torbellino----
 		//pruebaTorbellino(sampleWhirl());
 		//----Ejemplo Explosion----
-		pruebaExplosion(rocks);
+		//pruebaExplosion(rocks);
+		//----Ejemplo Torbellino con explosion----
+		pruebaTorbellinoYExplosion(sampleWhirl());
 
 	}
 
@@ -70,10 +72,6 @@ public:
 			s = nullptr;
 		}
 		for (ForceGenerator* s : _forceGenerators) {
-			delete s;
-			s = nullptr;
-		}
-		for (ExplosionGenerator* s : _explosions) {
 			delete s;
 			s = nullptr;
 		}
@@ -126,14 +124,35 @@ private:
 	};
 	void pruebaExplosion(const EmitterConfig& cfg1) {
 		//explosion mas duradera aprox tau=3.f; mas rapida =0.3f. K es la el factor de fuerza de la explosion
-		auto* explosion = new ExplosionGenerator(Vector3D(0.f, 0.f, 0.f), 50.f, 40.f, 1.0f);
-		auto* gravity = addGenerator(new GravityGenerator());
+		auto* explosion = addGenerator(new ExplosionGenerator(Vector3D(0.f, 0.f, 0.f), 50.f, 40.f, 1.0f));
 
 		auto* system = createSystem(cfg1);
 
 		system->addForceGenerator(explosion);
 		_explosions.push_back(explosion);
 	};
+
+	void pruebaTorbellinoYExplosion(const EmitterConfig& cfg) {
+		// Dos torbellinos en posiciones distintas
+		auto* whirl1 = addGenerator(new WhirlwindGenerator(Vector3D(-5.f, 0.f, 0.f),cfg.size, 20.f, 30.f, 1.f));
+		auto* whirl2 = addGenerator(new WhirlwindGenerator(Vector3D(5.f, 0.f, 0.f),cfg.size, 20.f, 30.f, 1.f));
+
+		// Dos explosiones en posiciones distintas
+		auto* explosion1 = addGenerator(new ExplosionGenerator(Vector3D(0.f, 0.f, 0.f),120.f, 40.f, 0.1f));
+		auto* explosion2 = addGenerator(new ExplosionGenerator(Vector3D(15.f, 25.f, 0.f),70.f, 70.f, 2.0f));
+
+		// un solo sistema afectado por varios generadores
+		auto* system = createSystem(cfg);
+
+		system->addForceGenerator(whirl1);
+		system->addForceGenerator(whirl2);
+		system->addForceGenerator(explosion1);
+		system->addForceGenerator(explosion2);
+
+		_explosions.push_back(explosion1);
+		_explosions.push_back(explosion2);
+	}
+
 	//no hace falta definir la gravedad. No es algo propio a calcular en la particula con fuerzas
 	EmitterConfig sample() {
 		EmitterConfig sample;
