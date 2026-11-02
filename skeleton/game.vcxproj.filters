@@ -14,14 +14,25 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticleWithForces.cpp" />
-    <ClCompile Include="ParticleGenerator.cpp" />
     <ClCompile Include="ParticleSystemWithForces.cpp" />
-    <ClCompile Include="GravityGenerator.cpp" />
-    <ClCompile Include="WindGenerator.cpp" />
     <ClCompile Include="Scenes\SceneManager.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="WhirlwindGenerator.cpp" />
+    <ClCompile Include="Generators\GravityGenerator.cpp">
+      <Filter>Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="Generators\ParticleGenerator.cpp">
+      <Filter>Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="Generators\WhirlwindGenerator.cpp">
+      <Filter>Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="Generators\WindGenerator.cpp">
+      <Filter>Generators</Filter>
+    </ClCompile>
+    <ClCompile Include="Generators\ExplosionGenerator.cpp">
+      <Filter>Generators</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -40,13 +51,9 @@
     </ClInclude>
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ParticleSystem.h" />
-    <ClInclude Include="ParticleGenerator.h" />
-    <ClInclude Include="ForceGenerator.h" />
     <ClInclude Include="ParticleWithForces.h" />
-    <ClInclude Include="GravityGenerator.h" />
     <ClInclude Include="ParticleSystemWithForces.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
-    <ClInclude Include="WindGenerator.h" />
     <ClInclude Include="Scenes\P0S_Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
@@ -71,7 +78,24 @@
     <ClInclude Include="Scenes\EmptyScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="WhirlwindGenerator.h" />
+    <ClInclude Include="Generators\ForceGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="Generators\GravityGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="Generators\ParticleGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="Generators\WhirlwindGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="Generators\WindGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
+    <ClInclude Include="Generators\ExplosionGenerator.h">
+      <Filter>Generators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
@@ -79,6 +103,9 @@
     </Filter>
     <Filter Include="Scenes">
       <UniqueIdentifier>{d8fde1fd-30a8-4ed0-a812-498f379c8a37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Generators">
+      <UniqueIdentifier>{1d08036d-246c-4044-90b0-faef32e62e03}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

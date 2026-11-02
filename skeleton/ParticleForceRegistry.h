@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "ForceGenerator.h"
+#include "Generators/ForceGenerator.h"
 class ParticleForceRegistry {
 public:
 	inline void add(ForceGenerator* generator) { _forceGenerators.push_back(generator); }

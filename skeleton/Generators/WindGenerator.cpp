@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES 
 #include <cmath>
 #include "WindGenerator.h"
-#include "ParticleWithForces.h"
+#include "../ParticleWithForces.h"
 
 
 WindGenerator::WindGenerator(const Vector3D& vel, float pRadius, float densidad, float viscosidad, float coefArraste)

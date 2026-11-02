@@ -1,6 +1,6 @@
 #pragma once
 #include "ForceGenerator.h"
-#include "SimulationConfig.h"
+#include "../SimulationConfig.h"
 
 class GravityGenerator :public ForceGenerator {
 public:

@@ -262,12 +262,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
-    <ClCompile Include="WhirlwindGenerator.cpp" />
-    <ClCompile Include="WindGenerator.cpp" />
-    <ClCompile Include="GravityGenerator.cpp" />
+    <ClCompile Include="Generators\ExplosionGenerator.cpp" />
+    <ClCompile Include="Generators\GravityGenerator.cpp" />
+    <ClCompile Include="Generators\ParticleGenerator.cpp" />
+    <ClCompile Include="Generators\WhirlwindGenerator.cpp" />
+    <ClCompile Include="Generators\WindGenerator.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="ParticleGenerator.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="ParticleSystemWithForces.cpp" />
     <ClCompile Include="ParticleWithForces.cpp" />
@@ -280,11 +281,13 @@
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
-    <ClInclude Include="WhirlwindGenerator.h" />
-    <ClInclude Include="WindGenerator.h" />
+    <ClInclude Include="Generators\ExplosionGenerator.h" />
+    <ClInclude Include="Generators\ForceGenerator.h" />
+    <ClInclude Include="Generators\GravityGenerator.h" />
+    <ClInclude Include="Generators\ParticleGenerator.h" />
+    <ClInclude Include="Generators\WhirlwindGenerator.h" />
+    <ClInclude Include="Generators\WindGenerator.h" />
     <ClInclude Include="Scenes\EmptyScene.h" />
-    <ClInclude Include="ForceGenerator.h" />
-    <ClInclude Include="GravityGenerator.h" />
     <ClInclude Include="Scenes\P0S_Scene.h" />
     <ClInclude Include="Scenes\P1S_Scene.h" />
     <ClInclude Include="Scenes\P2S_Scene.h" />
@@ -292,7 +295,6 @@
     <ClInclude Include="Scenes\P4S_Scene.h" />
     <ClInclude Include="Particle.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
-    <ClInclude Include="ParticleGenerator.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="ParticleSystemWithForces.h" />
     <ClInclude Include="ParticleWithForces.h" />

@@ -6,9 +6,7 @@
 #include "../RenderUtils.hpp"
 #include "../Vector3D.h"
 #include "../ParticleSystem.h"
-#include "../ParticleGenerator.h"
-
-using TransformKey = std::string;
+#include "Generators/ParticleGenerator.h"
 
 class P3S_Scene : public Scene {
 public:

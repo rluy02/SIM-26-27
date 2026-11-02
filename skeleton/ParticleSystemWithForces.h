@@ -1,6 +1,6 @@
 #pragma once
 #include <array>
-#include "ParticleGenerator.h" 
+#include "Generators/ParticleGenerator.h" 
 #include "ParticleForceRegistry.h"
 
 //Nota: En esta version se hace uso de AoS para aprovechar la impl. de la particula con fuerza y depurar facilmente

@@ -1,5 +1,5 @@
 #include "GravityGenerator.h"
-#include "ParticleWithForces.h"
+#include "../ParticleWithForces.h"
 
 GravityGenerator::GravityGenerator(const Vector3D& gravity)
 	: _gravity(gravity) {

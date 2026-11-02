@@ -5,13 +5,12 @@
 #include "Scene.h"
 #include "../RenderUtils.hpp"
 #include "../Vector3D.h"
-#include "../ParticleGenerator.h"
 #include "../ParticleSystemWithForces.h"
-#include "../GravityGenerator.h"
-#include "../WindGenerator.h"
-#include "../WhirlwindGenerator.h"
-
-using TransformKey = std::string;
+#include "Generators/ParticleGenerator.h"
+#include "Generators/GravityGenerator.h"
+#include "Generators/WindGenerator.h"
+#include "Generators/WhirlwindGenerator.h"
+#include "Generators/ExplosionGenerator.h"
 
 class P4S_Scene : public Scene {
 public:
@@ -23,27 +22,46 @@ public:
 		//ejemplo: globo vs pelota
 		EmitterConfig ball = sample();
 		ball.mass = 1.f; //es la default
-		ball.gravity = Vector3D(0.f, -9.81f, 0.f);
 		ball.pos = Vector3D(-5.f, 0.f, 0.f);
 		ball.size = 0.1f;
 
 		EmitterConfig balloon = sample();
 		balloon.mass = 1.f;
-		balloon.gravity = Vector3D(0.f, -9.81f, 0.f);
 		balloon.pos = Vector3D(5.f, 0.f, 0.f);
 		balloon.color = Vector4(0.5f, 0.5f, 0.5f, 1.f);
 		balloon.size = 0.5f;
 
-		//pruebaGravedad(cfg1, cfg2);
+		EmitterConfig rocks = sample();
+		rocks.mass = 0.1f; //es la default
+		rocks.pos = Vector3D(0.f, 0.f, 0.f);
+		rocks.size = 0.25f;
+		rocks.color = Vector4(0.1, 0.1, 0.5, 1.f);
+
+		//----Ejemplo Gravedad----
+		//pruebaGravedad(ball, balloon);
+		//----Ejemplo Viento----
 		//pruebaViento(ball, balloon); //la cfg1 le afectara mas el viento por su peso
-		pruebaTorbellino(sampleWhirl());
+		//----Ejemplo Torbellino----
+		//pruebaTorbellino(sampleWhirl());
+		//----Ejemplo Explosion----
+		pruebaExplosion(rocks);
 
 	}
 
-	void update(double dt) override { for (ParticleSystemWithForces* s : _systems) s->update(dt); }
+	void update(double dt) override {
+		for (ExplosionGenerator* explosion : _explosions) //primero actualizar la explosions
+			explosion->update(dt);
+
+		for (ParticleSystemWithForces* s : _systems)
+			s->update(dt);
+
+	}
 
 	void keyPress(unsigned char key, const physx::PxTransform& camera) override {
-
+		//activa todas las explosiones a la vez
+		if (key == 'e' || key == 'E')
+			for (ExplosionGenerator* explosion : _explosions)
+				explosion->activate();
 	}
 
 	void cleanup() override {
@@ -55,48 +73,68 @@ public:
 			delete s;
 			s = nullptr;
 		}
+		for (ExplosionGenerator* s : _explosions) {
+			delete s;
+			s = nullptr;
+		}
 		_systems.clear();
 		_forceGenerators.clear();
+		_explosions.clear();
 	}
 private:
-	void pruebaGravedad(const EmitterConfig& cfg1, const EmitterConfig& cfg2) {
-		_gravity = new GravityGenerator();
-		_megaGravity = new GravityGenerator(Vector3D(0.f, -30.f, 0.f));
-		_forceGenerators.push_back(_gravity);
-		_forceGenerators.push_back(_megaGravity);
+	ParticleSystemWithForces* createSystem(const EmitterConfig& cfg) {
+		ParticleSystemWithForces* system = new ParticleSystemWithForces(cfg);
+		_systems.push_back(system);
+		return system;
+	}
+	template <typename T>
+	T* addGenerator(T* generator) {
+		_forceGenerators.push_back(generator);
+		return generator;
+	}
 
-		///Sistemas
-		_systems.emplace_back(new ParticleSystemWithForces(cfg1));
-		_systems.emplace_back(new ParticleSystemWithForces(cfg2));
-		//registrar fuerzas
-		_systems[0]->addForceGenerator(_gravity);
-		_systems[1]->addForceGenerator(_megaGravity);
+	void pruebaGravedad(const EmitterConfig& cfg1, const EmitterConfig& cfg2) {
+		auto* gravity = addGenerator(new GravityGenerator());
+		auto* megaGravity = addGenerator(new GravityGenerator(Vector3D(0.f, -30.f, 0.f)));
+
+		auto* system1 = createSystem(cfg1);
+		auto* system2 = createSystem(cfg2);
+
+		system1->addForceGenerator(gravity);
+		system2->addForceGenerator(megaGravity);
 	};
 	void pruebaViento(const EmitterConfig& cfg1, const EmitterConfig& cfg2) {
-		//Viento
-		_wind = new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg1.size);
-		_wind2 = new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg2.size);
-		_forceGenerators.push_back(_wind);
-		_forceGenerators.push_back(_wind2);
+		//Vientos
+		auto* wind = addGenerator(new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg1.size));
+		auto* wind2 = addGenerator(new WindGenerator(Vector3D(15.f, 0.f, 0.f), cfg1.size));
 		///Sistemas
-		_systems.emplace_back(new ParticleSystemWithForces(cfg1));
-		_systems.emplace_back(new ParticleSystemWithForces(cfg2));
+		auto* system1 = createSystem(cfg1);
+		auto* system2 = createSystem(cfg2);
 		//registrar fuerzas
-		_systems[0]->addForceGenerator(_wind);
-		_systems[1]->addForceGenerator(_wind2);
+		system1->addForceGenerator(wind);
+		system2->addForceGenerator(wind2);
 	};
 
 	void pruebaTorbellino(const EmitterConfig& cfg1) {
-		//se debilita la velocidad vertical mientras sube, a partir de 30.f se iran reduciendo
+		//se debilita la velocidad vertical mientras sube, a partir de 30.f ira decayendo
 		//el radio de influencia del torbellino es 20*20.f
-		_whirl = new WhirlwindGenerator(Vector3D(0.f, 0.f, 0.f), cfg1.size, 20.f, 30.f, 1.f); //default en el centro del mundo
-		_gravity = new GravityGenerator();
-		_forceGenerators.push_back(_whirl);
-		_forceGenerators.push_back(_gravity);
-		_systems.emplace_back(new ParticleSystemWithForces(cfg1));
-		_systems[0]->addForceGenerator(_whirl);
-		//_systems[0]->addForceGenerator(_gravity);
+		auto* whirl = addGenerator(new WhirlwindGenerator(Vector3D(0.f, 0.f, 0.f), cfg1.size, 20.f, 30.f, 1.f)); //default en el centro del mundo
+
+		auto* system = createSystem(cfg1);
+
+		system->addForceGenerator(whirl);
 	};
+	void pruebaExplosion(const EmitterConfig& cfg1) {
+		//explosion mas duradera aprox tau=3.f; mas rapida =0.3f. K es la el factor de fuerza de la explosion
+		auto* explosion = new ExplosionGenerator(Vector3D(0.f, 0.f, 0.f), 50.f, 40.f, 1.0f);
+		auto* gravity = addGenerator(new GravityGenerator());
+
+		auto* system = createSystem(cfg1);
+
+		system->addForceGenerator(explosion);
+		_explosions.push_back(explosion);
+	};
+	//no hace falta definir la gravedad. No es algo propio a calcular en la particula con fuerzas
 	EmitterConfig sample() {
 		EmitterConfig sample;
 		sample.pos = Vector3D(0.f, 0.f, 0.f);
@@ -120,13 +158,10 @@ private:
 		tornado.lifeMin = 10.5f; tornado.lifeMax = 20.5f;
 		tornado.size = 0.15f;
 		tornado.mass = 0.2f;
-		//tornado.gravity = Vector3D(0.f, -9.81f, 0.f);
 		return tornado;
 	};
 private:
 	std::vector<ParticleSystemWithForces*> _systems;
 	std::vector< ForceGenerator*> _forceGenerators; //para no tener que eliminar manualmente
-	GravityGenerator* _gravity, * _megaGravity;
-	WindGenerator* _wind, * _wind2;
-	WhirlwindGenerator* _whirl;
+	std::vector<ExplosionGenerator*> _explosions; //para simular varias explosiones
 };

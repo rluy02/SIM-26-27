@@ -1,8 +1,8 @@
 #pragma once
 #include <random>
-#include "Vector3D.h"
-#include "SimulationConfig.h"
-#include "RenderUtils.hpp"
+#include "../Vector3D.h"
+#include "../SimulationConfig.h"
+#include "../RenderUtils.hpp"
 
 // Lo que es comun al emisor (color, damping) va aparte
 struct ParticleSample {

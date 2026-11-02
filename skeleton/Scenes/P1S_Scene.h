@@ -5,8 +5,6 @@
 #include "../Vector3D.h"
 #include "../Particle.h"
 
-using TransformKey = std::string;
-
 class P1S_Scene : public Scene {
 public:
 	explicit P1S_Scene(std::string name) : Scene(std::move(name)) {}

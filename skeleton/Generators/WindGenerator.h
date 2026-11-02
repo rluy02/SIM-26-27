@@ -1,6 +1,6 @@
 #pragma once
 #include "ForceGenerator.h"
-#include "SimulationConfig.h"
+#include "../SimulationConfig.h"
 
 //SUPONEMOS QUE LOS OBJETOS QUE AFECTAN SON SIEMPRE UNIFORMES
 class WindGenerator :public ForceGenerator {

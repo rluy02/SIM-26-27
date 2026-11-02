@@ -1,6 +1,6 @@
 #pragma once
 #include <array>
-#include "ParticleGenerator.h" 
+#include "Generators/ParticleGenerator.h" 
 /// <summary>
 /// Dueño de la memoria, de actualizar y borrar
 /// </summary>

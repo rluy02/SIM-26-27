@@ -7,8 +7,6 @@
 #include "../Vector3D.h"
 #include "../Projectile.h"
 
-using TransformKey = std::string;
-
 struct ProjectileType {
 	std::string name;
 	float rMass;    // kg   (real)
