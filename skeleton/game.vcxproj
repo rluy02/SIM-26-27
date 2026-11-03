@@ -273,6 +273,7 @@
     <ClCompile Include="ParticleSystemWithForces.cpp" />
     <ClCompile Include="ParticleWithForces.cpp" />
     <ClCompile Include="Projectile.cpp" />
+    <ClCompile Include="ProjectileWithForces.cpp" />
     <ClCompile Include="RenderUtils.cpp" />
     <ClCompile Include="Render\Camera.cpp" />
     <ClCompile Include="Render\Render.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="Generators\ParticleGenerator.h" />
     <ClInclude Include="Generators\WhirlwindGenerator.h" />
     <ClInclude Include="Generators\WindGenerator.h" />
+    <ClInclude Include="ProjectileWithForces.h" />
     <ClInclude Include="Scenes\MProject_Scene.h" />
     <ClInclude Include="Scenes\P0S_Scene.h" />
     <ClInclude Include="Scenes\P1S_Scene.h" />

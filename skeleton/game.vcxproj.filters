@@ -33,6 +33,7 @@
     <ClCompile Include="Generators\ExplosionGenerator.cpp">
       <Filter>Generators</Filter>
     </ClCompile>
+    <ClCompile Include="ProjectileWithForces.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -96,6 +97,7 @@
     <ClInclude Include="Generators\ExplosionGenerator.h">
       <Filter>Generators</Filter>
     </ClInclude>
+    <ClInclude Include="ProjectileWithForces.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
