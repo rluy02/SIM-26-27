@@ -75,7 +75,7 @@
     <ClInclude Include="Scenes\SceneManager.h">
       <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="Scenes\EmptyScene.h">
+    <ClInclude Include="Scenes\MProject_Scene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Generators\ForceGenerator.h">

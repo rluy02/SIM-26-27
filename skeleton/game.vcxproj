@@ -287,7 +287,7 @@
     <ClInclude Include="Generators\ParticleGenerator.h" />
     <ClInclude Include="Generators\WhirlwindGenerator.h" />
     <ClInclude Include="Generators\WindGenerator.h" />
-    <ClInclude Include="Scenes\EmptyScene.h" />
+    <ClInclude Include="Scenes\MProject_Scene.h" />
     <ClInclude Include="Scenes\P0S_Scene.h" />
     <ClInclude Include="Scenes\P1S_Scene.h" />
     <ClInclude Include="Scenes\P2S_Scene.h" />

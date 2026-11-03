@@ -1,0 +1,9 @@
+Ricardo Luy - Proyecto Intermedio
+
+Requisito A.1) --> "ParticleWithForces.cpp" 29-34. En la linea 33 se llama al método real de integración "verlet()" 51-60.
+Requisito A.2) --> "ParticleWithForces.cpp" 7-8 atributo masa y el resto de componentes que recibe la constructora. 
+               --> "MProject_Scene.h" FALTA POR DEFINIR; CUANDO SE TERMINE TODO EL .H
+Requisito A.3) --> "ParticleWithForces.cpp" 11 se calcula _invMass: que almacena la inversa de la masa. En "verlet()" 53 se calcula la aceleración aplicando el principio de la masa.
+	       --> "MProject_Scene.h" FALTA POR DEFINIR; CUANDO SE TERMINE TODO EL .H se aplica la misma fuerza para ambas particulas, y se deberia de observar en la demo como la de menor masa acelera más.
+
+Requisito B.1)

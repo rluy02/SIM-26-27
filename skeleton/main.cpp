@@ -22,7 +22,7 @@
 #include <iostream>
 // Para las escenas del curso, se incluyen los headers de las prácticas y la escena vacía
 #include "Scenes/SceneManager.h"
-#include "Scenes/EmptyScene.h"
+#include "Scenes/MProject_Scene.h"
 #include "Scenes/P0S_Scene.h"
 #include "Scenes/P1S_Scene.h"
 #include "Scenes/P2S_Scene.h"
@@ -103,7 +103,7 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 	// Registrar las prácticas/escenas del curso
-	SceneManager::instance().registerScene<EmptyScene>("EscenaVacia");
+	SceneManager::instance().registerScene<MProject_Scene>("EscenaProyectoIntermedio");
 	SceneManager::instance().registerScene<P0S_Scene>("P0S_Scene");
 	SceneManager::instance().registerScene<P1S_Scene>("P1S_Scene");
 	SceneManager::instance().registerScene<P2S_Scene>("P2S_Scene");
@@ -111,7 +111,7 @@ void initPhysics(bool interactive)
 	SceneManager::instance().registerScene<P4S_Scene>("P4S_Scene");
 
 	// Cargar la escena inicial
-	SceneManager::instance().changeScene("EscenaVacia");
+	SceneManager::instance().changeScene("EscenaProyectoIntermedio");
 
 }
 

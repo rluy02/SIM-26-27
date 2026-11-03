@@ -67,9 +67,12 @@ void ParticleWithForces::addForce(const Vector3D& force) {
 	_f += force; //agregar a la acumulada que pueda tener en el momento
 }
 void ParticleWithForces::showParamsDebug() {
+	std::cout << "- - - - - -" << std::endl;
 	std::cout << "Posicion: " << Vector3D(_pos.p) << std::endl;
 	std::cout << "Velocidad: " << _vel << std::endl;
 	std::cout << "Fuerzas: " << _f << std::endl;
+	const Vector3D acc = _f * _invMass;
+	std::cout << "Aceleracion: " << acc << std::endl;
 	std::cout << "Masa: " << _mass << std::endl;
 	std::cout << "Dumping: " << _damping << std::endl;
 }
