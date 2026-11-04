@@ -7,10 +7,13 @@
 class ParticleSystemWithForces {
 public:
 	explicit ParticleSystemWithForces(const EmitterConfig& cfg);
+	explicit ParticleSystemWithForces(const EmitterConfig& cfg, std::string name);
 	~ParticleSystemWithForces();
 
 	void update(double t);
 	void addForceGenerator(ForceGenerator* generator); //pueden ser muchos que se agregaran al registro
+	void toggleEmission() { _emissionActive = !_emissionActive; }
+	void showDebug() const;
 private:
 	void generateParticles();
 	void spawn(const ParticleSample& s);
@@ -19,6 +22,8 @@ private:
 	ParticleGenerator _particleGen;
 	Vector3D _centerEmitter;
 	ParticleForceRegistry _registry;
+	bool _emissionActive = true;
+	std::string _name = "";
 
 	static constexpr size_t _MAX_PARTICLES = 5000;
 	static constexpr float RADIUS_LIMIT = 75.f;

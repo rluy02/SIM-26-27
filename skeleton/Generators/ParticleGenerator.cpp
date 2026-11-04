@@ -20,7 +20,6 @@ size_t ParticleGenerator::howMany(float lodFactor) {
 	return static_cast<size_t>(std::fmax(0.f, std::round(n)));
 
 	//ScreenSizeFactor = clamp(︄R/(d · tan(FOV/2)),0,0,1,0)
-	//agregar en cuanto sea posible
 }
 
 ParticleSample ParticleGenerator::sample() {

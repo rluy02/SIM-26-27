@@ -16,6 +16,7 @@ ParticleSystemWithForces::~ParticleSystemWithForces()
 }
 
 void ParticleSystemWithForces::generateParticles() {
+	if (!_emissionActive) return;
 	const size_t n = _particleGen.howMany();
 	for (size_t i = 0; i < n; i++)
 	{
@@ -81,4 +82,18 @@ void ParticleSystemWithForces::update(double dt) {
 
 void ParticleSystemWithForces::addForceGenerator(ForceGenerator* generator) {
 	_registry.add(generator);
+}
+
+//Aux para el debug.
+ParticleSystemWithForces::ParticleSystemWithForces(const EmitterConfig& cfg, std::string name)
+	: _particleGen(cfg),
+	_centerEmitter(cfg.pos), _name(std::move(name)) {
+}
+void ParticleSystemWithForces::showDebug() const {
+	if (_name != "")
+		std::cout << "[ " << _name << " ] " << "Emision: " << (_emissionActive ? "ACTIVA" : "DESACTIVADA")
+		<< " | Particulas vivas: " << _alive << std::endl;
+	else
+		std::cout << "Emision: " << (_emissionActive ? "ACTIVA" : "DESACTIVADA")
+		<< " | Particulas vivas: " << _alive << std::endl;
 }

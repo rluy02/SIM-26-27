@@ -10,6 +10,7 @@
 #include "../RenderUtils.hpp"
 #include "../ParticleWithForces.h"
 #include "../ProjectileWithForces.h"
+#include "../ParticleSystemWithForces.h"
 
 //Nota: Se hace uso de punteros inteligentes para reducir miembros en la clase y codigo extra en el cleanup
 //Con comentar/descomentar en el init el "apartadoX" es suficiente para visualizar o quitar la implementacion que se desee
@@ -24,20 +25,25 @@ public:
 		p1.pos = Vector3D(15.f, 0.f, 0.f);
 		p1.vel = Vector3D(0.f, 0.f, -3.f);
 		p1.mass = 0.5f;
+		p1.pSize = 2.f;
 
 		p2.pos = Vector3D(-15.f, 0.f, 0.f);
 		p2.vel = Vector3D(0.f, 0.f, -6.f);
 		p2.mass = 1.5f;
+		p2.pSize = 2.f;
+		p2.color = Vector4(0.3f, 0.7f, 0.2f, 1.f);
 
-		apartadoA(p1, p2);											// comentar-descomentar esta linea para ver el resultado
+		//apartadoA(p1, p2);											// comentar-descomentar esta linea para ver el resultado
 		//---------------------------------------------------
 		//------------ Apartado B (configurable) ------------
 		// Nombre, masa real, velocidad real, gravedad real, velocidad simulada, damping, tamaño, color
 		ProjectileType pt1("Bala", 0.0075f, 340.f, simulation::worldGravityY, 30.f, 1.f, 2.f, Vector4(1.f, 0.f, 0.f, 1.f));
 		ProjectileType pt2("Bola de canon", 5.f, 300.f, simulation::worldGravityY, 40.f, 1.f, 6.f, Vector4(0.f, 1.f, 0.f, 1.f));
 
-		apartadoB(pt1, pt2);										// comentar-descomentar esta linea para ver el resultado
+		//apartadoB(pt1, pt2);										// comentar-descomentar esta linea para ver el resultado
 		//---------------------------------------------------
+		//------------ Apartado C (config apA) ------------
+		apartadoC(p1, p2);											// comentar-descomentar esta linea para ver el resultado
 	}
 
 	void update(double dt) override {
@@ -54,6 +60,12 @@ public:
 			p.particle->addForce(p.gravityForce);
 			p.particle->integrateSEE(dt); //Ejemplo de que funciona correctamente con SEE
 		}
+		//---------------------------------------------------
+		//-------------------- Apartado C -------------------
+		for (const auto& p : _systems) {
+			p->update(dt); //Ya se gestionan las fuerzas dentro del sistema
+		}
+		//---------------------------------------------------
 
 	}
 
@@ -64,19 +76,30 @@ public:
 		//---------------------------------------------------
 		//-------------------- Apartado B -------------------
 		if (!_projectileTypes.empty()) {
-			if (key == 'c' || key == 'C') {								// 'C' para cambiar el tipo de proyectil
+			if (key == 'c' || key == 'C') {								    // 'C' para cambiar el tipo de proyectil
 				_selected = (_selected + 1) % _projectileTypes.size();
 				_projectileTypes[_selected].showDebug();
 			}
-			if (key == ' ') {											// 'Espacio'para disparar
+			if (key == ' ') {											    // 'Espacio'para disparar
 				shoot(_projectileTypes[_selected]);
 				return;
 			}
-			if (key == 'p' || key == 'P') {								// 'P' para mostrar informacion del proyectil actual
+			if (key == 'p' || key == 'P') {								    // 'P' para mostrar informacion del proyectil actual
 				_projectileTypes[_selected].showDebug();
 			}
 		}
 		//---------------------------------------------------
+		//-------------------- Apartado D -------------------
+		if (!_systems.empty()) {
+			if (key == 'v' || key == 'V')
+				_selectedSystem = (_selectedSystem + 1) % _systems.size();	// 'V' para cambiar la seleccion del sistema de particulas
+
+			if (key == 'g' || key == 'G')
+				_systems[_selectedSystem]->toggleEmission();				// 'G' para apagar/encender el generador de particulas en seleccion
+
+			if (key == 'o' || key == 'O')
+				_systems[_selectedSystem]->showDebug();						// 'O' para mostrar informacion del sistema actual
+		}
 	}
 
 	void cleanup() override {
@@ -86,6 +109,9 @@ public:
 		_projectileTypes.clear();
 		_projectiles.clear();
 		_selected = 0;
+		//ApartadoC
+		_systems.clear();
+		_selectedSystem = 0;
 	}
 
 
@@ -178,7 +204,35 @@ private: //------------ Apartado B ------------
 	}
 
 private: //------------ Apartado C ------------
+	void apartadoC(const Particle& p1, const Particle& p2) {
+		//Se hace uso del modelo de las particulas creadas en el apartado A.
+		EmitterConfig ec1;
+		ec1.pos = p1.pos;
+		ec1.vel = p1.vel;
+		ec1.size = p1.pSize;
+		ec1.color = p1.color;
+		ec1.mass = p1.mass;
+		ec1.damping = p1.damping;
+		ec1.velSigma = Vector3D(1.f, 1.f, 1.f);
+		ec1.posSigma = Vector3D(4.f, 4.f, 4.f);
+		ec1.lifeMin = 1.5f; ec1.lifeMax = 2.5f;
+		ec1.meanPerFrame = 3.f; ec1.varPerFrame = 1.f;
 
+		EmitterConfig ec2;
+		ec2.pos = p2.pos;
+		ec2.vel = p2.vel;
+		ec2.size = p2.pSize;
+		ec2.color = p2.color;
+		ec2.mass = p2.mass;
+		ec2.damping = p2.damping;
+		ec2.velSigma = Vector3D(2.f, 2.f, 2.f);
+		ec2.posSigma = Vector3D(4.f, 4.f, 4.f);
+		ec2.lifeMin = 1.5f; ec2.lifeMax = 2.5f;
+		ec2.meanPerFrame = 3.f; ec2.varPerFrame = 1.f;
+		//No se registra ningun generador de fuerzas todavia.
+		_systems.emplace_back(std::make_unique<ParticleSystemWithForces>(ec1, "Sist. Azul"));
+		_systems.emplace_back(std::make_unique<ParticleSystemWithForces>(ec2, "Sist. Verde"));
+	}
 private: //----Miembros clase----
 	//ApartadoA
 	std::vector< std::unique_ptr<ParticleWithForces>> _particles;
@@ -187,4 +241,7 @@ private: //----Miembros clase----
 	std::vector<ProjectileType> _projectileTypes;
 	int _selected = 0;
 	//ApartadoC
+	std::vector< std::unique_ptr<ParticleSystemWithForces>>_systems;
+	//ApartadoD
+	size_t _selectedSystem = 0;
 };

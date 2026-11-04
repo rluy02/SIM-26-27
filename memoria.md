@@ -37,3 +37,25 @@ El método `shoot()` genera los proyectiles desde la cámara utilizando la veloc
 **Consideración adicional:** Los proyectiles disparados no se eliminan durante la ejecución, por lo que el vector que los almacena puede crecer indefinidamente a medida que se dispara.
 
 ## Requisito C
+
+→ `ParticleSystemWithForces.cpp`, se encarga en su totalidad de crear, destruir y actualizar un conjunto de partículas (su ciclo de vida). También gestiona el generador de partículas y el registro de generadores de fuerzas. (Su funcionamiento se explica con más detalle en el apartado D)
+→ `MProject_Scene.h`, líneas 194-223: en el `apartadoC()` se reutilizan las configuraciones de las partículas definidas en el apartado A como referencia para configurar los emisores mediante `EmitterConfig`. Se establecen los parámetros iniciales y sus variaciones, incluyendo posición, velocidad y tiempo de vida.
+
+## Requisito D
+
+**D.1)** → `ParticleGenerator.h`: la clase ParticleGenerator almacena un EmitterConfig como modelo de configuración del emisor. Este contiene los parámetros base de las partículas que se generarán.
+
+→ `ParticleGenerator.cpp`, líneas 25-32 método `sample()`: se genera una muestra con posición y velocidad variables, además de un tiempo de vida aleatorio mediante una distribución uniforme en el intervalo configurado.
+
+**D.2)** → `ParticleGenerator.cpp`, líneas 8-15 método `gaussian()`: se utiliza una distribución normal para obtener variaciones aleatorias e independientes en los componentes X, Y y Z de la posición y velocidad.
+
+→ `ParticleGenerator.cpp`, líneas 17-23 método `howMany()`: se determina la cantidad de partículas que se generarán por fotograma mediante una distribución uniforme.
+
+**D.3)**→ `ParticleSystemWithForces.cpp`: el sistema solicita muestras al generador y crea las partículas correspondientes. De este modo, el sistema controla cuándo se generan partículas y cuándo deja de hacerlo. Obsérvese en: `generateParticles()` líneas 18-25; `spawn(muestra)` líneas 27-42; `kill()` líneas 44-58 ;`update()` línea 60-81.
+
+**Controles:**
+- `V`: cambiar el tipo sistema.
+- `G`: apagar/encender el generador de partículas para el sistema en selección.
+- `O`: mostrar información del sistema seleccionado.
+
+## Requisito E
