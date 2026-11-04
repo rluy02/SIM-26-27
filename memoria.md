@@ -2,56 +2,57 @@
 
 ## Información general
 
-La escena con las pruebas del proyecto se encuentra en `MProject_Scene.h`. Se carga de forma predeterminada al iniciar el programa y también se puede acceder a ella mediante la tecla `5`.
+-La escena con las pruebas del proyecto se encuentra en `MProject_Scene.h`. Se carga de forma predeterminada al iniciar el programa y también se puede acceder a ella mediante la tecla `5`.\
+-A lo largo de la memoria 'L.' = Líneas del código
 
 ## Requisito A
 
-**A.1)** → `ParticleWithForces.cpp`, líneas 29-34. En la línea 33 se llama al método de integración `verlet()`, implementado en las líneas 51-60.
+**A.1)** → `ParticleWithForces.cpp`, `integrateVerlet()` L. 29-34. En la L. 33 se llama al método de integración `verlet()`, implementado en L. 51-60.
 
-**A.2)** → `ParticleWithForces.cpp`, líneas 7-8: se define el atributo masa y el resto de componentes que recibe el constructor.
+**A.2)** → `ParticleWithForces.cpp`, L. 7-8: se define el atributo masa y el resto de componentes que recibe el constructor.
 
-→ `MProject_Scene.h`, líneas 18-25: se define el struct `Particle`, del que se crean dos instancias con diferentes parámetros para `apartadoA()` (línea 27).
+→ `MProject_Scene.h`, L. 27-37: se define el struct `Particle`, del que se crean dos instancias con diferentes parámetros para el `apartadoA()` L. 39.
 
-**A.3)** → `ParticleWithForces.cpp`, línea 11: se calcula `_invMass`, que almacena la inversa de la masa. En `verlet()`, línea 53, se calcula la aceleración aplicando la segunda ley de Newton.
+**A.3)** → `ParticleWithForces.cpp`, L. 11: se calcula `_invMass`, que almacena la inversa de la masa. En `verlet()`, L. 51-60, se calcula la aceleración aplicando la segunda ley de Newton.
 
-→ `MProject_Scene.h`, líneas 64-65: se aplica la misma fuerza a ambas partículas. En la demostración debería observarse cómo la partícula de menor masa adquiere una aceleración mayor.
+→ `MProject_Scene.h`, `update()` L. 57-61: se aplica la misma fuerza a ambas partículas en cada iteración. En la demo debería observarse cómo la partícula de menor masa adquiere una aceleración mayor.
 
 **Controles:**
 - `I`: mostrar información de las partículas generadas.
 
 ## Requisito B
 
-→ `ProjectileWithForces.cpp`, líneas 3-4: adaptación de la clase `Projectile` de la prácticas anteriores (`Projectile.cpp` y `P2S_Scene.h`). Se mantiene la lógica del proyectil, pero se sustituye la aceleración como atributo por la aplicación de fuerzas mediante `ParticleWithForces`.
+→ `ProjectileWithForces.cpp`, L. 3-4: adaptación de la clase `Projectile` de prácticas anteriores (`Projectile.cpp` y `P2S_Scene.h`). Se mantiene la lógica del proyectil, pero se sustituye la aceleración como atributo por la aplicación de fuerzas mediante `ParticleWithForces`.
 
-→ `MProject_Scene.h`, líneas 100-170: se definen las estructuras auxiliares para configurar los tipos de proyectil y calcular sus parámetros simulados, incluyendo masa, gravedad y fuerza. También se define `ActiveProjectile`, que almacena cada proyectil disparado y su fuerza gravitatoria.
+→ `MProject_Scene.h`, L. 168-234: se definen las estructuras auxiliares para configurar los tipos de proyectil y calcular sus parámetros simulados, incluyendo masa, gravedad y fuerza. También se define `ActiveProjectile`, que almacena cada proyectil disparado y su fuerza gravitatoria.
 
-El método `shoot()` genera los proyectiles desde la cámara utilizando la velocidad y la masa simuladas.
+El método `shoot(ProjectileType)` L. 221-234 genera los proyectiles según el tipo seleccionado desde la cámara utilizando la velocidad y la masa simuladas.
 
 **Controles:**
 - `Espacio`: disparar.
 - `C`: cambiar el tipo de proyectil.
 - `P`: mostrar información del tipo seleccionado.
 
-**Extra:** Se omite el ajuste dinámico de la masa o velocidad del proyectil para simplificar los controles de la escena. Una posible implementación sería similar a la realizada en `P2S_Scene.h`, líneas 79-95.
+**Extra:** Se omite el ajuste dinámico de la masa o velocidad del proyectil para simplificar los controles de la escena. Una posible implementación sería similar a la realizada en `P2S_Scene.h`, L. 79-95.
 
 **Consideración adicional:** Los proyectiles disparados no se eliminan durante la ejecución, por lo que el vector que los almacena puede crecer indefinidamente a medida que se dispara.
 
 ## Requisito C
 
-→ `ParticleSystemWithForces.cpp`, se encarga en su totalidad de crear, destruir y actualizar un conjunto de partículas (su ciclo de vida). También gestiona el generador de partículas y el registro de generadores de fuerzas. (Su funcionamiento se explica con más detalle en el apartado D)
-→ `MProject_Scene.h`, líneas 194-223: en el `apartadoC()` se reutilizan las configuraciones de las partículas definidas en el apartado A como referencia para configurar los emisores mediante `EmitterConfig`. Se establecen los parámetros iniciales y sus variaciones, incluyendo posición, velocidad y tiempo de vida.
+→ `ParticleSystemWithForces.cpp`, se encarga en su totalidad de crear, destruir y actualizar un conjunto de partículas (su ciclo de vida). También gestiona el generador de partículas y el registro de generadores de fuerzas. (Para evitar redundancias, su funcionamiento se explica con más detalle en el apartado D).
+→ `MProject_Scene.h`, L. 237-265: en el `apartadoC()` se reutilizan las configuraciones de las partículas definidas en el apartado A como referencia para configurar los emisores mediante `EmitterConfig`. Se establecen los parámetros iniciales y sus variaciones, incluyendo posición, velocidad y tiempo de vida.
 
 ## Requisito D
 
 **D.1)** → `ParticleGenerator.h`: la clase ParticleGenerator almacena un EmitterConfig como modelo de configuración del emisor. Este contiene los parámetros base de las partículas que se generarán.
 
-→ `ParticleGenerator.cpp`, líneas 25-32 método `sample()`: se genera una muestra con posición y velocidad variables, además de un tiempo de vida aleatorio mediante una distribución uniforme en el intervalo configurado.
+→ `ParticleGenerator.cpp`, L. 25-32 método `sample()`: se genera una muestra con posición y velocidad variables, además de un tiempo de vida aleatorio mediante una distribución uniforme en el intervalo configurado.
 
-**D.2)** → `ParticleGenerator.cpp`, líneas 8-15 método `gaussian()`: se utiliza una distribución normal para obtener variaciones aleatorias e independientes en los componentes X, Y y Z de la posición y velocidad.
+**D.2)** → `ParticleGenerator.cpp`, L. 8-15 método `gaussian()`: se utiliza una distribución normal para obtener variaciones aleatorias e independientes en los componentes X, Y y Z de la posición y velocidad.
 
-→ `ParticleGenerator.cpp`, líneas 17-23 método `howMany()`: se determina la cantidad de partículas que se generarán por fotograma mediante una distribución uniforme.
+→ `ParticleGenerator.cpp`, L. 17-23 método `howMany()`: se determina la cantidad de partículas que se generarán por fotograma mediante una distribución uniforme.
 
-**D.3)**→ `ParticleSystemWithForces.cpp`: el sistema solicita muestras al generador y crea las partículas correspondientes. De este modo, el sistema controla cuándo se generan partículas y cuándo deja de hacerlo. Obsérvese en: `generateParticles()` líneas 18-25; `spawn(muestra)` líneas 27-42; `kill()` líneas 44-58 ;`update()` línea 60-81.
+**D.3)**→ `ParticleSystemWithForces.cpp`: el sistema solicita muestras al generador y crea las partículas correspondientes. De este modo, el sistema controla cuándo se generan partículas y cuándo deja de hacerlo. Obsérvese en: `generateParticles()` L. 18-25; `spawn(muestra)` L. 27-42; `kill()` L. 44-58 ;`update()` L. 60-81.
 
 **Controles:**
 - `V`: cambiar el tipo sistema.
@@ -59,3 +60,40 @@ El método `shoot()` genera los proyectiles desde la cámara utilizando la veloc
 - `O`: mostrar información del sistema seleccionado.
 
 ## Requisito E
+
+**E.1)** → El cálculo de las fuerzas se realiza individualmente para cada partícula. Para ello, se utiliza la clase `ParticleForceRegistry.h`, que coordina las llamadas a los generadores de fuerza registrados en cada sistema de partículas.
+
+Durante la actualización del sistema, el registro recorre los generadores activos y les proporciona la partícula sobre la que deben calcular la fuerza. Cada generador consulta la información necesaria de dicha partícula y acumula la fuerza resultante en la partícula mediante el metodo `addForce()` de `ParticleWithForces.cpp` L. 66-68.
+
+Se ha optado por centralizar la coordinación de estas llamadas en el registro, en lugar de delegarla directamente en cada partícula. De esta manera, se mantiene separado el cálculo físico de las fuerzas de la gestión de los generadores, facilitando su reutilización entre diferentes sistemas.
+
+**E.2)** → Una partícula puede recibir fuerzas de varios generadores. En `ParticleForceRegistry.h` L. 21-25 `applyForces()` recorre todos los generadores del registro y dentro de la llamada virtual del metodo `updateForce` cada partícula suma la aportación con `addForce()` de los registros que les corresponda. Antes de aplicarlas, el `ParticleSystemWithForces::update()` del sistema limpia la fuerza acumulada con `ParticleWithForces::clearForces()` L. 62-64, de modo que no se arrastra la fuerza del fotograma anterior.
+
+→ `MProject_Scene.h`, `apartadoE()` L. 274-290: el "Sist. Azul" tiene registrados el torbellino y la explosión, por lo que sus partículas reciben ambas fuerzas a la vez.
+
+**E.3)** → En `ParticleSystemWithForces.h/cpp` cada sistema tiene su propio `ParticleForceRegistry` (`_registry`), que contiene únicamente los generadores activos para sus partículas. Se gestionan con `addForceGenerator()` L. 83-85 y `toggleForceGenerator()` L. 87-94 (del .cpp)
+
+→ En `ParticleForceRegistry.h` se hace uso de `add()` L. 8, `remove()` L.9-17 y `has()` L.27-29 que son funciones utilizadas por lo explicado anteriormente.
+
+Los generadores no pertenecen a ningún sistema: los crea y destruye la escena en `MProject_Scene.h` con el metodo `addGenerator()` L.268-273. Un mismo generador puede afectar a varios sistemas, y se puede quitar de uno sin que deje de funcionar en los demás.
+
+→ En la escena, el torbellino está registrado en los dos sistemas, y la explosión solo en el azul `apartadoE()`. En la demo se puede seleccionar un sistema y quitarle o añadirle un generador (ver controles).
+
+**E.4)** → Se han implementado dos generadores de fuerza, que heredan de la plantilla `ForceGenerator.h`:
+
+- **Torbellino** (`WhirlwindGenerator.cpp`, que hereda de `WindGenerator`): la fuerza **varía con la posición** de la partícula.
+  - `WhirlwindGenerator::getWindVelocity()` L.9-24 devuelve la velocidad del viento en la posición de la partícula: `v = k·(-dz, vs - dy, dx)`, siendo (dx, dz) la distancia horizontal al centro y dy la altura relativa. Gira alrededor del eje vertical y deja de subir al llegar a la altura `vs`. Fuera del radio de influencia (cilindro vertical) el viento es nulo.
+  - `WindGenerator::updateForce()` L.16-28 calcula el arrastre L.19-27: `F = k1·(Vv - v) + k2·|Vv - v|·(Vv - v)`, con Vv la velocidad del viento y v la de la partícula. Las constantes se calculan en el constructor (L.7-14), suponiendo una esfera de radio `r`: `k1 = 6πηr` (Stokes) y `k2 = ½·Cd·ρ·πr²`.
+  - Como Vv depende de la posición, dos partículas en puntos distintos reciben fuerzas distintas.
+- **Explosión** (`ExplosionGenerator.cpp`): la fuerza **varía con el tiempo**.
+  - `activate()` L.40-43 pone a cero el tiempo transcurrido desde la explosión y la activa.
+  - `updateForce()` L.10-29 calcula la fuerza sobre cada partícula: `F = (K / r²) · (x - xc) · e^(-t/τ)`, siendo `xc` el centro de la explosión, `r` la distancia de la partícula al centro, `t` el tiempo desde la activación y `τ` la constante de tiempo. Solo afecta a las partículas dentro del radio de influencia (se descartan también las que están prácticamente en el centro, para evitar dividir por cero).
+  - `update()` L.31-38 avanza `t` en cada paso de simulación (se llama desde `MProject_Scene.h` L.76-77) y desactiva la explosión cuando `t ≥ 4τ`, momento en que el factor `e^(-t/τ)` ya es despreciable (≈ 2 %). Así se puede volver a disparar.
+
+**Controles:**
+- `V`: cambiar el sistema seleccionado (se muestra por consola).
+- `E`: disparar la explosión. Solo afecta a los sistemas que la tengan registrada.
+- `H`: registrar/quitar el torbellino en el sistema seleccionado.
+- `J`: registrar/quitar la explosión en el sistema seleccionado.
+
+**Demostración sugerida:** con `V` selecciona el sistema verde, pulsa `J` para añadirle la explosión y `E` para dispararla. Después pulsa `H` para quitarle el torbellino y observa que el sistema azul lo sigue teniendo. Con `O` puedes ver cuántos generadores tiene activos cada sistema.

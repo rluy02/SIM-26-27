@@ -84,6 +84,15 @@ void ParticleSystemWithForces::addForceGenerator(ForceGenerator* generator) {
 	_registry.add(generator);
 }
 
+bool ParticleSystemWithForces::toggleForceGenerator(ForceGenerator* generator) {
+	if (_registry.has(generator)) {
+		_registry.remove(generator);
+		return false;
+	}
+	_registry.add(generator); //Si no lo tenia, se agrega de igual manera
+	return true;
+}
+
 //Aux para el debug.
 ParticleSystemWithForces::ParticleSystemWithForces(const EmitterConfig& cfg, std::string name)
 	: _particleGen(cfg),
@@ -91,9 +100,8 @@ ParticleSystemWithForces::ParticleSystemWithForces(const EmitterConfig& cfg, std
 }
 void ParticleSystemWithForces::showDebug() const {
 	if (_name != "")
-		std::cout << "[ " << _name << " ] " << "Emision: " << (_emissionActive ? "ACTIVA" : "DESACTIVADA")
-		<< " | Particulas vivas: " << _alive << std::endl;
-	else
-		std::cout << "Emision: " << (_emissionActive ? "ACTIVA" : "DESACTIVADA")
-		<< " | Particulas vivas: " << _alive << std::endl;
+		std::cout << "[ " << _name << " ] ";
+	std::cout << "Emision: " << (_emissionActive ? "ACTIVA" : "DESACTIVADA")
+		<< " | Particulas vivas: " << _alive
+		<< " | Generadores de fuerza activos: " << _registry.size() << std::endl;
 }

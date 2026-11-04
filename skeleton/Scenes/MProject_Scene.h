@@ -11,6 +11,9 @@
 #include "../ParticleWithForces.h"
 #include "../ProjectileWithForces.h"
 #include "../ParticleSystemWithForces.h"
+#include "../Generators/ExplosionGenerator.h"
+#include "../Generators/ForceGenerator.h"
+#include "../Generators/WhirlwindGenerator.h"
 
 //Nota: Se hace uso de punteros inteligentes para reducir miembros en la clase y codigo extra en el cleanup
 //Con comentar/descomentar en el init el "apartadoX" es suficiente para visualizar o quitar la implementacion que se desee
@@ -25,7 +28,7 @@ public:
 		p1.pos = Vector3D(15.f, 0.f, 0.f);
 		p1.vel = Vector3D(0.f, 0.f, -3.f);
 		p1.mass = 0.5f;
-		p1.pSize = 2.f;
+		p1.pSize = 0.5f;
 
 		p2.pos = Vector3D(-15.f, 0.f, 0.f);
 		p2.vel = Vector3D(0.f, 0.f, -6.f);
@@ -33,17 +36,20 @@ public:
 		p2.pSize = 2.f;
 		p2.color = Vector4(0.3f, 0.7f, 0.2f, 1.f);
 
-		//apartadoA(p1, p2);											// comentar-descomentar esta linea para ver el resultado
+		apartadoA(p1, p2);											// comentar-descomentar esta linea para ver el resultado
 		//---------------------------------------------------
 		//------------ Apartado B (configurable) ------------
 		// Nombre, masa real, velocidad real, gravedad real, velocidad simulada, damping, tamaño, color
 		ProjectileType pt1("Bala", 0.0075f, 340.f, simulation::worldGravityY, 30.f, 1.f, 2.f, Vector4(1.f, 0.f, 0.f, 1.f));
 		ProjectileType pt2("Bola de canon", 5.f, 300.f, simulation::worldGravityY, 40.f, 1.f, 6.f, Vector4(0.f, 1.f, 0.f, 1.f));
 
-		//apartadoB(pt1, pt2);										// comentar-descomentar esta linea para ver el resultado
+		apartadoB(pt1, pt2);										    // comentar-descomentar esta linea para ver el resultado
 		//---------------------------------------------------
 		//------------ Apartado C (config apA) ------------
-		apartadoC(p1, p2);											// comentar-descomentar esta linea para ver el resultado
+		apartadoC(p1, p2);										     	// comentar-descomentar esta linea para ver el resultado
+		//---------------------------------------------------
+		//------------ Apartado E (necesita apC) ------------
+		apartadoE(p1.pSize);											// comentar-descomentar esta linea para ver el resultado	
 	}
 
 	void update(double dt) override {
@@ -66,6 +72,9 @@ public:
 			p->update(dt); //Ya se gestionan las fuerzas dentro del sistema
 		}
 		//---------------------------------------------------
+		//-------------------- Apartado E -------------------
+		if (_explosion)
+			_explosion->update(dt);
 
 	}
 
@@ -91,14 +100,31 @@ public:
 		//---------------------------------------------------
 		//-------------------- Apartado D -------------------
 		if (!_systems.empty()) {
-			if (key == 'v' || key == 'V')
-				_selectedSystem = (_selectedSystem + 1) % _systems.size();	// 'V' para cambiar la seleccion del sistema de particulas
-
+			if (key == 'v' || key == 'V') {
+				_selectedSystem = (_selectedSystem + 1) % _systems.size();	// 'V' cambia la seleccion del sistema de particulas
+				std::cout << "SELECCION ACTUAL [ " << _systems[_selectedSystem]->getName() << " ]" << std::endl;
+			}
 			if (key == 'g' || key == 'G')
-				_systems[_selectedSystem]->toggleEmission();				// 'G' para apagar/encender el generador de particulas en seleccion
+				_systems[_selectedSystem]->toggleEmission();				// 'G' activa/desactiva el generador de particulas en seleccion
 
 			if (key == 'o' || key == 'O')
-				_systems[_selectedSystem]->showDebug();						// 'O' para mostrar informacion del sistema actual
+				_systems[_selectedSystem]->showDebug();						// 'O' muestra informacion del sistema actual
+		}
+		//---------------------------------------------------
+		//-------------------- Apartado E -------------------
+		if (!_systems.empty()) {
+			if (key == 'e' || key == 'E')									// 'E' genera las explosion
+				if (_explosion)
+					_explosion->activate(); // despues de activarse, se desactiva con el pasar del tiempo
+
+			if ((key == 'h' || key == 'H') && _whirl) {						// 'H' agrega/quita el generador de torbellinos solo en el sistema seleccionado
+				const bool active = _systems[_selectedSystem]->toggleForceGenerator(_whirl);
+				std::cout << "Torbellino " << (active ? "REGISTRADO" : "RETIRADO") << " en " << _systems[_selectedSystem]->getName() << std::endl;
+			}
+			if ((key == 'j' || key == 'J') && _explosion) {					// 'J' agrega/quita el generador de explosiones solo en el sistema seleccionado
+				const bool active = _systems[_selectedSystem]->toggleForceGenerator(_explosion);
+				std::cout << "Explosion " << (active ? "REGISTRADO" : "RETIRADA") << " en " << _systems[_selectedSystem]->getName() << std::endl;
+			}
 		}
 	}
 
@@ -112,10 +138,14 @@ public:
 		//ApartadoC
 		_systems.clear();
 		_selectedSystem = 0;
+		//ApartadoE
+		_whirl = nullptr;
+		_explosion = nullptr;
+		_forceGenerators.clear();
 	}
 
-
-private: //------------ Apartado A ------------
+private:
+#pragma region Apartado A 
 	struct Particle {
 		Vector3D pos = Vector3D(0.f, 0.f, 0.f);
 		Vector3D vel = Vector3D(0.f, 0.f, 0.f);
@@ -133,8 +163,8 @@ private: //------------ Apartado A ------------
 	std::unique_ptr<ParticleWithForces> createParticle(const Particle& p) {
 		return std::make_unique<ParticleWithForces>(p.pos, p.vel, p.mass, p.damping, p.pSize, p.color);
 	}
-
-private: //------------ Apartado B ------------
+#pragma endregion
+#pragma region Apartado B 
 	struct ProjectileType {
 		std::string name;
 
@@ -201,9 +231,9 @@ private: //------------ Apartado B ------------
 		p.gravityForce = Vector3D(0.f, type.sForce, 0.f); //la de la gravedad
 
 		_projectiles.push_back(std::move(p));
-	}
-
-private: //------------ Apartado C ------------
+	};
+#pragma endregion
+#pragma region Apartado C 
 	void apartadoC(const Particle& p1, const Particle& p2) {
 		//Se hace uso del modelo de las particulas creadas en el apartado A.
 		EmitterConfig ec1;
@@ -215,7 +245,7 @@ private: //------------ Apartado C ------------
 		ec1.damping = p1.damping;
 		ec1.velSigma = Vector3D(1.f, 1.f, 1.f);
 		ec1.posSigma = Vector3D(4.f, 4.f, 4.f);
-		ec1.lifeMin = 1.5f; ec1.lifeMax = 2.5f;
+		ec1.lifeMin = 3.5f; ec1.lifeMax = 6.5f;
 		ec1.meanPerFrame = 3.f; ec1.varPerFrame = 1.f;
 
 		EmitterConfig ec2;
@@ -227,13 +257,39 @@ private: //------------ Apartado C ------------
 		ec2.damping = p2.damping;
 		ec2.velSigma = Vector3D(2.f, 2.f, 2.f);
 		ec2.posSigma = Vector3D(4.f, 4.f, 4.f);
-		ec2.lifeMin = 1.5f; ec2.lifeMax = 2.5f;
+		ec2.lifeMin = 5.5f; ec2.lifeMax = 10.5f;
 		ec2.meanPerFrame = 3.f; ec2.varPerFrame = 1.f;
 		//No se registra ningun generador de fuerzas todavia.
 		_systems.emplace_back(std::make_unique<ParticleSystemWithForces>(ec1, "Sist. Azul"));
 		_systems.emplace_back(std::make_unique<ParticleSystemWithForces>(ec2, "Sist. Verde"));
 	}
-private: //----Miembros clase----
+#pragma endregion
+#pragma region Apartado E
+	template <typename T>
+	T* addGenerator(std::unique_ptr<T> generator) {
+		T* ptr = generator.get();
+		_forceGenerators.push_back(std::move(generator));
+		return ptr;
+	}
+	void apartadoE(float pSize) {
+		// Torbellino
+		auto* whirl = addGenerator(std::make_unique<WhirlwindGenerator>(Vector3D(0.f, 0.f, 0.f), pSize, 30.f, 30.f, 0.2f)); //Este afecta a ambos sistemas
+		_whirl = whirl;
+		//Explosion
+		auto* explosion = addGenerator(std::make_unique<ExplosionGenerator>(Vector3D(0.f, 10.f, 0.f), 300.f, 130.f, 1.f)); // cerca de donde spawnea el sistema
+		_explosion = explosion;
+
+		// Se aprovechan los sistemas del apartado C
+		if (_systems.empty()) return;
+		// Sistema azul: recibe ambos generadores inicialmente
+		_systems[0]->addForceGenerator(whirl);
+		_systems[0]->addForceGenerator(explosion);
+
+		// Sistema verde: comparte el torbellino.
+		_systems[1]->addForceGenerator(whirl); //Se le puede agregar a traves de la seleccion y con 'J' el generador de explosion
+	}
+#pragma endregion
+#pragma region Miembros clase
 	//ApartadoA
 	std::vector< std::unique_ptr<ParticleWithForces>> _particles;
 	//ApartadoB
@@ -244,4 +300,9 @@ private: //----Miembros clase----
 	std::vector< std::unique_ptr<ParticleSystemWithForces>>_systems;
 	//ApartadoD
 	size_t _selectedSystem = 0;
+	//ApartadoE
+	std::vector<std::unique_ptr<ForceGenerator>> _forceGenerators;
+	WhirlwindGenerator* _whirl = nullptr;
+	ExplosionGenerator* _explosion = nullptr; //si se quisieran simular varias explosiones se implementaria un vector para recorrerlos
 };
+#pragma endregion

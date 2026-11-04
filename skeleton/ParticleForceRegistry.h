@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
+#include <algorithm>
 #include "Generators/ForceGenerator.h"
+
 class ParticleForceRegistry {
 public:
 	inline void add(ForceGenerator* generator) { _forceGenerators.push_back(generator); }
@@ -21,6 +23,12 @@ public:
 			fg->updateForce(particle, dt); //que cada uno aplique lo que corresponda, se puede ir acumulando si tiene varias
 		}
 	}
+	//Para consultar
+	bool has(const ForceGenerator* generator) const {
+		return std::find(_forceGenerators.begin(), _forceGenerators.end(), generator) != _forceGenerators.end();
+	}
+
+	size_t size() const { return _forceGenerators.size(); }
 
 private:
 	std::vector<ForceGenerator*> _forceGenerators;

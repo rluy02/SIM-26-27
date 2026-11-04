@@ -28,7 +28,7 @@ void ExplosionGenerator::updateForce(ParticleWithForces* p, float dt) {
 	p->addForce(force);
 }
 
-void ExplosionGenerator::update(float dt) {
+void ExplosionGenerator::update(double dt) {
 	if (_active) {
 		_elapsedTime += static_cast<float>(dt);
 

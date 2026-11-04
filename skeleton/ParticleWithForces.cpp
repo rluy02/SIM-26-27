@@ -1,13 +1,13 @@
 #include "ParticleWithForces.h"
 #include "SimulationConfig.h"
-#include <cfloat>
+#include <cassert>
 #include <iostream>
 
 
 ParticleWithForces::ParticleWithForces(const Vector3D& pos, const Vector3D& vel, const float mass, const float damping, const float pSize, const Vector4& color)
 	: _vel(vel), _f(Vector3D(0.f, 0.f, 0.f)), _mass(mass), _damping(damping), _radius(pSize)
 {
-	assert(_mass > (1e-7f - FLT_EPSILON)); //basicamente que sea mayor que un 0 muy pequeño
+	assert(_mass > 1e-7f); //basicamente que sea mayor que un 0 muy pequeño
 	_invMass = 1.f / _mass;
 	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(pSize));//referencia compartida
 	_pos = physx::PxTransform(pos);

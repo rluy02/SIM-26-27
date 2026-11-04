@@ -12,7 +12,9 @@ public:
 
 	void update(double t);
 	void addForceGenerator(ForceGenerator* generator); //pueden ser muchos que se agregaran al registro
+	bool toggleForceGenerator(ForceGenerator* generator);
 	void toggleEmission() { _emissionActive = !_emissionActive; }
+	const std::string& getName() const { return _name; }
 	void showDebug() const;
 private:
 	void generateParticles();
