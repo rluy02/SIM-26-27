@@ -234,28 +234,26 @@ namespace Snippets
 
 namespace
 {
-void reshapeCallback(int width, int height)
+void reshapeCallback(int width, int height) //aqui esta dentro de snippets, es diferente a la de RenderUtils
 {
 	glViewport(0, 0, width, height);
 }
 }
 
-void setupDefaultWindow(const char *name)
+void setupDefaultWindow(const char* name)
 {
-	char* namestr = new char[strlen(name)+1];
-	strcpy(namestr, name);
 	int argc = 1;
-	char* argv[1] = { namestr };
+	char appName[] = "SimulacionFisica";
+	char* argv[] = { appName, nullptr };
 
 	glutInit(&argc, argv);
 	
-	glutInitWindowSize(512, 512);
+	glutInitWindowSize(1200,700); //Tam ini
 	glutInitDisplayMode(GLUT_RGB|GLUT_DOUBLE|GLUT_DEPTH);
-	int mainHandle = glutCreateWindow(name);
+	int mainHandle = glutCreateWindow(name); //encontre el memory leak, son internos de glut
 	glutSetWindow(mainHandle);
-	glutReshapeFunc(reshapeCallback);
-	
-	delete[] namestr;
+	glutReshapeFunc(reshapeCallback); //esto es para cuando se redimensiona el vp
+
 }
 
 void setupDefaultRenderState()
