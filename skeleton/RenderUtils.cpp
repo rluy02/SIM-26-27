@@ -24,6 +24,8 @@ double PCFreq = 0.0;
 __int64 CounterStart = 0;
 __int64 CounterLast = 0;
 
+// Nota: (**) con eso se evita que una accion en la vent. de imgui afecte al comportamiento de nuestra escena.
+
 void StartCounter()
 {
 	LARGE_INTEGER li;
@@ -53,7 +55,9 @@ namespace
 	void motionCallback(int x, int y)
 	{
 		ImGui_ImplGLUT_MotionFunc(x, y);
-		sCamera->handleMotion(x, y);
+
+		if (!ImGui::GetIO().WantCaptureMouse) // ** para evitar que la camara reciba eventos utilizados por imgui
+			sCamera->handleMotion(x, y);
 	}
 
 	//La sobreescribo aqui para no tocar el Render.cpp
@@ -69,14 +73,24 @@ namespace
 		if (key == 27)
 			exit(0);
 
-		if (!sCamera->handleKey(key, x, y))
-			keyPress(key, sCamera->getTransform());
+		if (!ImGui::GetIO().WantCaptureKeyboard) //** 
+		{
+			if (!sCamera->handleKey(key, x, y))
+				keyPress(key, sCamera->getTransform());
+		}
 	}
 
 	void mouseCallback(int button, int state, int x, int y)
 	{
 		ImGui_ImplGLUT_MouseFunc(button, state, x, y);
-		sCamera->handleMouse(button, state, x, y);
+
+		if (!ImGui::GetIO().WantCaptureMouse) //** 
+			sCamera->handleMouse(button, state, x, y);
+	}
+
+	void passiveMotionCallback(int x, int y) //asi recibe imgui el mov del raton aunque no se pulse/mueva nada
+	{
+		ImGui_ImplGLUT_MotionFunc(x, y);
 	}
 
 	void idleCallback()
@@ -185,7 +199,8 @@ void renderLoop()
 	glutMouseFunc(mouseCallback);
 	glutMotionFunc(motionCallback);
 	motionCallback(0, 0);
-	glutReshapeFunc(reshapeCallback);//Registramos la func de RenderUtils
+	glutReshapeFunc(reshapeCallback); //Registramos la func de ESTA clase
+	glutPassiveMotionFunc(passiveMotionCallback); //
 
 	initPhysics(true);
 	atexit(exitCallback); //despues de la fisica para que se ejecute antes de la destrucción estática de SceneManager.
