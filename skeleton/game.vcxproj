@@ -289,6 +289,7 @@
   <ItemGroup>
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="FinalProject\Prototype_Scene.h" />
     <ClInclude Include="Generators\ExplosionGenerator.h" />
     <ClInclude Include="Generators\ForceGenerator.h" />
     <ClInclude Include="Generators\GravityGenerator.h" />

@@ -143,6 +143,7 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
+    <ClInclude Include="FinalProject\Prototype_Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
