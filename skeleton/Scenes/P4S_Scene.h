@@ -11,6 +11,7 @@
 #include "Generators/WindGenerator.h"
 #include "Generators/WhirlwindGenerator.h"
 #include "Generators/ExplosionGenerator.h"
+#include "imgui.h"
 
 class P4S_Scene : public Scene {
 public:
@@ -59,6 +60,23 @@ public:
 
 	}
 
+	void drawDebugUI() override {
+		if (ImGui::Button("Detonar todas"))
+			for (ExplosionGenerator* e : _explosions) e->activate();   // igual que la tecla E
+		ImGui::Separator();
+
+		for (size_t i = 0; i < _forceGenerators.size(); ++i) {
+			ForceGenerator* g = _forceGenerators[i];
+			char label[64];
+			snprintf(label, sizeof(label), "%s %zu", g->uiName(), i);
+
+			ImGui::PushID(int(i));
+			if (ImGui::CollapsingHeader(label))
+				g->drawUI();
+			ImGui::PopID();
+		}
+	}
+
 	void keyPress(unsigned char key, const physx::PxTransform& camera) override {
 		//activa todas las explosiones a la vez
 		if (key == 'e' || key == 'E')
@@ -69,11 +87,9 @@ public:
 	void cleanup() override {
 		for (ParticleSystemWithForces* s : _systems) {
 			delete s;
-			s = nullptr;
 		}
 		for (ForceGenerator* s : _forceGenerators) {
 			delete s;
-			s = nullptr;
 		}
 		_systems.clear();
 		_forceGenerators.clear();

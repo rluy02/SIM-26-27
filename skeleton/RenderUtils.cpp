@@ -8,7 +8,7 @@
 #include "imgui.h"
 #include "imgui_impl_glut.h"
 #include "imgui_impl_opengl2.h"
-
+#include "Scenes/SceneManager.h"
 using namespace physx;
 
 extern void initPhysics(bool interactive);
@@ -51,7 +51,8 @@ double GetCounter()
 namespace
 {
 	Camera* sCamera;
-
+	bool paused = false;
+	float timeScale = 1.f;
 	void motionCallback(int x, int y)
 	{
 		ImGui_ImplGLUT_MotionFunc(x, y);
@@ -119,7 +120,7 @@ namespace
 			stepTime = 0.0f;
 		}
 #else
-		stepPhysics(true, t);
+		stepPhysics(true, paused ? 0.0 : t * timeScale);
 #endif
 
 		//Logica integrada segun el ejemplo de implGlut para ImGui
@@ -129,7 +130,17 @@ namespace
 		ImGui::NewFrame();
 
 		// 2. Construir la interfaz
-		ImGui::ShowDemoWindow();
+		//ImGui::ShowDemoWindow();
+		if (ImGui::Begin("Dev Window")) {
+			ImGui::Checkbox("Pausa", &paused);
+			ImGui::SliderFloat("Escala de tiempo", &timeScale, 0.f, 3.f);
+			ImGui::Text("%.1f FPS", ImGui::GetIO().Framerate);
+			ImGui::Separator();
+			SceneManager::instance().drawDebugUI();   // reenvía a la escena activa
+		}
+		ImGui::End();
+		//En este punto ya se terminado de ejecutar drawDebugUI(), si esta en pausa y algo pendiente lo puede hacer interrumpir ninguna otra funcion
+		SceneManager::instance().flushPendingChange();
 
 		//Escena 3D
 		startRender(sCamera->getEye(), sCamera->getDir());

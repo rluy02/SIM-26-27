@@ -1,5 +1,6 @@
 #include "SceneManager.h"
 #include <iostream>
+#include "imgui.h"
 
 // Solicita el cambio de escena. Si el nombre no está registrado, se escribe
 // un error en stderr y la solicitud se ignora.
@@ -86,4 +87,25 @@ void SceneManager::keyPress(unsigned char key, const physx::PxTransform& cameraT
     if (m_currentScene != nullptr) {
         m_currentScene->keyPress(key, cameraTransform);
     }
+}
+
+void SceneManager::drawDebugUI() {
+    const std::string current = m_currentScene ? m_currentScene->getName() : "(ninguna)";
+
+    if (ImGui::BeginCombo("Escena", current.c_str())) {
+        for (const auto& entry : m_factories) {
+            const std::string& name = entry.first;
+            if (ImGui::Selectable(name.c_str(), name == current))
+                changeScene(name);          // diferido: se aplica en el siguiente update()
+        }
+        ImGui::EndCombo();
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Reiniciar") && m_currentScene)
+        changeScene(m_currentScene->getName());
+
+    ImGui::Separator();
+
+    if (m_currentScene)                     // en el primer frame aún no existe
+        m_currentScene->drawDebugUI();
 }

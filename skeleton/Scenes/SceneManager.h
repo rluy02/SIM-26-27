@@ -42,6 +42,12 @@ public:
     // Devuelve un puntero a la escena actual (no toma propiedad).
     [[nodiscard]] Scene* getCurrentScene() const { return m_currentScene.get(); }
 
+    // ImGui: selector de escena + delegación en la escena activa
+    void drawDebugUI();
+
+    // Aplica un cambio pendiente aunque la simulación esté en pausa
+    void flushPendingChange() { applyPendingSceneChange(); }
+
 private:
     SceneManager() = default;
 

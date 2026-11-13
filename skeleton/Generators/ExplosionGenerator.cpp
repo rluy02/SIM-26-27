@@ -1,6 +1,7 @@
 #include <cmath>
 #include "ExplosionGenerator.h"
 #include "../ParticleWithForces.h"
+#include "imgui.h"
 
 ExplosionGenerator::ExplosionGenerator(const Vector3D& pos, float k, float radius, float constante) : _pos(pos),
 _k(k), _radiusInfluence(radius), _constTiempo(constante), _elapsedTime(0.f), _active(false) {
@@ -41,5 +42,22 @@ void ExplosionGenerator::activate() {
 	_elapsedTime = 0.f;
 	_active = true;
 };
+
+void ExplosionGenerator::drawUI() {
+	float c[3] = { _pos.x, _pos.y, _pos.z };
+	if (ImGui::DragFloat3("Centro", c, 0.5f))
+		_pos = Vector3D(c[0], c[1], c[2]);
+
+	ImGui::DragFloat("K (fuerza)", &_k, 1.f, 0.f, 2000.f, "%.1f", ImGuiSliderFlags_AlwaysClamp);
+	ImGui::DragFloat("Radio de influencia", &_radiusInfluence, 0.5f, 0.5f, 300.f, "%.1f", ImGuiSliderFlags_AlwaysClamp);
+	ImGui::DragFloat("Tau (duracion)", &_constTiempo, 0.01f, 0.05f, 10.f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+
+	if (_active)
+		ImGui::ProgressBar(_elapsedTime / (4.f * _constTiempo), ImVec2(-FLT_MIN, 0.f), "activa");
+	else
+		ImGui::TextDisabled("inactiva");
+
+	if (ImGui::Button("Detonar")) activate();
+}
 
 //Se habla del tiempo DESDE que ocurrio la explosion. Con eso en cuenta se puede simular la perdida de energia

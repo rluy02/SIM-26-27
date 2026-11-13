@@ -15,3 +15,7 @@ x64/
 x86/
 bin/
 obj/
+
+# Dear ImGui
+imgui.ini
+skeleton/imgui.ini
