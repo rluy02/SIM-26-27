@@ -2,24 +2,27 @@
 #include "Vector3D.h"
 #include "RenderUtils.hpp"
 
+enum class ParticleShape { Sphere, Box };
 //Impl. en una clase aparte para mantener versionado lo hecho hasta ahora
 class ParticleWithForces
 {
 public:
 	explicit ParticleWithForces(const Vector3D& pos, const Vector3D& vel, const float mass, const float damping = 1.00f,
-		const float pSize = 10.f, const Vector4& color = Vector4(0.f, 1.f, 1.f, 1.f));
+		const float pSize = 10.f, const Vector4& color = Vector4(0.f, 1.f, 1.f, 1.f), ParticleShape shapeType = ParticleShape::Sphere);
 	virtual ~ParticleWithForces();
 	//Diferente metodo de integracion según para que.
 	virtual void integrateVerlet(double t);
 	virtual void integrateSEE(double t); //Más conveniente para el sistema
+	virtual void integrateEE(double t);
 	void showParamsDebug();
 	void clearForces();
 	void addForce(const Vector3D& force);
 	inline float getMass() const { return _mass; };
-	inline Vector3D getVel() const { return _vel; };
-	inline const Vector3D& getPosition() const { return _pos.p; }
+	inline const Vector3D getVel() const { return _vel; };
+	inline const Vector3D getPosition() const { return _pos.p; }
 	inline const float getSize() const { return _radius; } //radius
 private:
+	void explicitEuler(float t);
 	void semiExplicitEuler(float t);
 	void verlet(float t);
 protected:

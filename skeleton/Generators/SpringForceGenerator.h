@@ -3,12 +3,15 @@
 class SpringForceGenerator :public ForceGenerator
 {
 public:
-    SpringForceGenerator(double k, double resting_length, ParticleWithForces* p);
+    SpringForceGenerator(float k, float resting_length, ParticleWithForces* other);
     void updateForce(ParticleWithForces* p,float dt) override;
-    inline void setK(double k) { _k = k; }
-private:
-    double _k; //Coef de elasticidad
-    double _restingLength;
+    inline void setK(float k) { _k = k; }
+    inline float getK()const { return _k; }
+protected:
     ParticleWithForces* _otherP;
+private:
+    float _k; //Coef de elasticidad
+    float _restingLength;
+
 };
 

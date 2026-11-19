@@ -113,7 +113,7 @@ void initPhysics(bool interactive)
 	SceneManager::instance().registerScene<P6S_Scene>("P6S_Scene");
 
 	// Cargar la escena inicial
-	SceneManager::instance().changeScene("EscenaProyectoIntermedio");
+	SceneManager::instance().changeScene("P6S_Scene");
 
 }
 

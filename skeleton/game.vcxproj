@@ -262,6 +262,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="Generators\AnchoredSpringFG.cpp" />
     <ClCompile Include="Generators\ExplosionGenerator.cpp" />
     <ClCompile Include="Generators\GravityGenerator.cpp" />
     <ClCompile Include="Generators\ParticleGenerator.cpp" />
@@ -291,6 +292,7 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="FinalProject\Prototype_Scene.h" />
+    <ClInclude Include="Generators\AnchoredSpringFG.h" />
     <ClInclude Include="Generators\ExplosionGenerator.h" />
     <ClInclude Include="Generators\ForceGenerator.h" />
     <ClInclude Include="Generators\GravityGenerator.h" />

@@ -4,12 +4,15 @@
 #include <iostream>
 
 
-ParticleWithForces::ParticleWithForces(const Vector3D& pos, const Vector3D& vel, const float mass, const float damping, const float pSize, const Vector4& color)
+ParticleWithForces::ParticleWithForces(const Vector3D& pos, const Vector3D& vel, const float mass, const float damping,
+	const float pSize, const Vector4& color, ParticleShape shapeType) 
 	: _vel(vel), _f(Vector3D(0.f, 0.f, 0.f)), _mass(mass), _damping(damping), _radius(pSize)
 {
 	assert(_mass > 1e-7f); //basicamente que sea mayor que un 0 muy pequeño
 	_invMass = 1.f / _mass;
-	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(pSize));//referencia compartida
+	physx::PxShape* shape = (shapeType == ParticleShape::Box)
+		? CreateShape(physx::PxBoxGeometry(pSize, pSize, pSize))   // semiextensiones
+		: CreateShape(physx::PxSphereGeometry(pSize));
 	_pos = physx::PxTransform(pos);
 	const float dt = simulation::fixedTimestepF;
 
@@ -26,11 +29,11 @@ ParticleWithForces::~ParticleWithForces()
 	_renderItem->release();	_renderItem = nullptr;
 }
 
-void ParticleWithForces::integrateVerlet(double t)
+void ParticleWithForces::integrateEE(double t)
 {
 	assert(simulation::fixedTimestepF == t);
 	const float dt = static_cast<float>(t);
-	verlet(dt);
+	explicitEuler(dt);
 }
 void ParticleWithForces::integrateSEE(double t)
 {
@@ -38,7 +41,21 @@ void ParticleWithForces::integrateSEE(double t)
 	const float dt = static_cast<float>(t);
 	semiExplicitEuler(dt);
 }
+void ParticleWithForces::integrateVerlet(double t)
+{
+	assert(simulation::fixedTimestepF == t);
+	const float dt = static_cast<float>(t);
+	verlet(dt);
+}
+void ParticleWithForces::explicitEuler(float dt)
+{
+	const Vector3D acc = _f * _invMass;
+	// xi + 1 = xi + h · vi
+	// vi + 1 = vi + h · ai
+	_pos.p = _pos.p + dt * _vel;
+	_vel = (_vel + dt * acc) * _dampingFactor;
 
+}
 void ParticleWithForces::semiExplicitEuler(float dt) //Actualiza velocidad antes que la posicion (más preciso y estable)
 {
 	const Vector3D acc = _f * _invMass;
