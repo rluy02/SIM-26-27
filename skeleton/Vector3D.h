@@ -89,6 +89,24 @@ public:
 			return Vector3D(); // empty
 		return *this / m;
 	}
+
+	// Normaliza el propio vector y devuelve su magnitud original. (Eficiente para el generador del muelle)
+	inline float normalized()
+	{
+		float m = magnitude();
+		assert(m > 0.000001f && "An operation is attempting to divide by zero.");
+		if (m <= 0.000001f)
+		{
+			return 0.0f;
+		}
+
+		float invM = 1.0f / m; // Multiplicar por la inversa es más eficiente que dividir varias veces
+		x *= invM;
+		y *= invM;
+		z *= invM;
+
+		return m;
+	}
 	// It returns a scalar value indicating vector alignment : positive(same direction,<90), negative(opposite
 	// directions,>90), or zero(orthogonal,90) ABC=|A||B||C|cos(angle)
 	inline float dot(const Vector3D& other) const

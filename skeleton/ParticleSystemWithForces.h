@@ -16,6 +16,9 @@ public:
 	void toggleEmission() { _emissionActive = !_emissionActive; }
 	const std::string& getName() const { return _name; }
 	void showDebug() const;
+public:
+	void drawUI();
+	const char* uiName() const { return "Sistema de particulas"; }
 private:
 	void generateParticles();
 	void spawn(const ParticleSample& s);

@@ -265,6 +265,7 @@
     <ClCompile Include="Generators\ExplosionGenerator.cpp" />
     <ClCompile Include="Generators\GravityGenerator.cpp" />
     <ClCompile Include="Generators\ParticleGenerator.cpp" />
+    <ClCompile Include="Generators\SpringForceGenerator.cpp" />
     <ClCompile Include="Generators\WhirlwindGenerator.cpp" />
     <ClCompile Include="Generators\WindGenerator.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_glut.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="Generators\ForceGenerator.h" />
     <ClInclude Include="Generators\GravityGenerator.h" />
     <ClInclude Include="Generators\ParticleGenerator.h" />
+    <ClInclude Include="Generators\SpringForceGenerator.h" />
     <ClInclude Include="Generators\WhirlwindGenerator.h" />
     <ClInclude Include="Generators\WindGenerator.h" />
     <ClInclude Include="imgui\backends\imgui_impl_glut.h" />
@@ -320,6 +322,7 @@
     <ClInclude Include="RenderUtils.hpp" />
     <ClInclude Include="Render\Camera.h" />
     <ClInclude Include="Render\Render.h" />
+    <ClInclude Include="Scenes\P6S_Scene.h" />
     <ClInclude Include="Scenes\Scene.h" />
     <ClInclude Include="Scenes\SceneManager.h" />
     <ClInclude Include="SimulationConfig.h" />

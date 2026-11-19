@@ -82,6 +82,10 @@ void SceneManager::keyPress(unsigned char key, const physx::PxTransform& cameraT
         changeScene("EscenaProyectoIntermedio");
         return; // Consumimos el evento para que no interfiera con la escena
     }
+    if (key == '6') {
+        changeScene("P6S_Scene");
+        return; // Consumimos el evento para que no interfiera con la escena
+    }
 
     // Si no es una tecla de navegación global, se la pasamos a la escena activa
     if (m_currentScene != nullptr) {

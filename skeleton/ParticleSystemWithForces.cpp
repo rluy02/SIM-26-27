@@ -1,5 +1,6 @@
 #include "ParticleSystemWithForces.h"
 #include "ParticleWithForces.h"
+#include "imgui.h"
 
 ParticleSystemWithForces::ParticleSystemWithForces(const EmitterConfig& cfg)
 	: _particleGen(cfg),
@@ -93,7 +94,7 @@ bool ParticleSystemWithForces::toggleForceGenerator(ForceGenerator* generator) {
 	return true;
 }
 
-//Aux para el debug.
+//Aux para el debug. (por consola)
 ParticleSystemWithForces::ParticleSystemWithForces(const EmitterConfig& cfg, std::string name)
 	: _particleGen(cfg),
 	_centerEmitter(cfg.pos), _name(std::move(name)) {
@@ -104,4 +105,8 @@ void ParticleSystemWithForces::showDebug() const {
 	std::cout << "Emision: " << (_emissionActive ? "ACTIVA" : "DESACTIVADA")
 		<< " | Particulas vivas: " << _alive
 		<< " | Generadores de fuerza activos: " << _registry.size() << std::endl;
+}
+//Debug ImGui
+void ParticleSystemWithForces::drawUI() {
+	ImGui::Text("Particulas vivas: %zu", _alive);
 }

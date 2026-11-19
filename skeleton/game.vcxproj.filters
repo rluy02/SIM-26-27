@@ -55,6 +55,7 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="Generators\SpringForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -144,6 +145,8 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="FinalProject\Prototype_Scene.h" />
+    <ClInclude Include="Scenes\P6S_Scene.h" />
+    <ClInclude Include="Generators\SpringForceGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

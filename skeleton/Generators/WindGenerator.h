@@ -10,6 +10,9 @@ public:
 		, float coefArraste = 0.47f);
 	void updateForce(ParticleWithForces* p, float dt) override;
 	virtual Vector3D getWindVelocity(const ParticleWithForces* p) const { return _vel; };
+public: //ImGui
+	//void drawUI() override;
+	const char* uiName() const override { return "Wind"; }
 private:
 	Vector3D _vel;
 	float _k1, _k2;

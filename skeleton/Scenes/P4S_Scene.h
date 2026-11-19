@@ -61,6 +61,7 @@ public:
 	}
 
 	void drawDebugUI() override {
+		//----
 		if (ImGui::Button("Detonar todas"))
 			for (ExplosionGenerator* e : _explosions) e->activate();   // igual que la tecla E
 		ImGui::Separator();
@@ -73,6 +74,17 @@ public:
 			ImGui::PushID(int(i));
 			if (ImGui::CollapsingHeader(label))
 				g->drawUI();
+			ImGui::PopID();
+		}
+		//----
+		for (size_t i = 0; i < _systems.size(); ++i) {
+			ParticleSystemWithForces* p = _systems[i];
+			char label[64];
+			snprintf(label, sizeof(label), "%s %zu", p->uiName(), i);
+
+			ImGui::PushID(int(i));
+			if (ImGui::CollapsingHeader(label))
+				p->drawUI();
 			ImGui::PopID();
 		}
 	}
@@ -150,12 +162,12 @@ private:
 
 	void pruebaTorbellinoYExplosion(const EmitterConfig& cfg) {
 		// Dos torbellinos en posiciones distintas
-		auto* whirl1 = addGenerator(new WhirlwindGenerator(Vector3D(-5.f, 0.f, 0.f),cfg.size, 20.f, 30.f, 1.f));
-		auto* whirl2 = addGenerator(new WhirlwindGenerator(Vector3D(5.f, 0.f, 0.f),cfg.size, 20.f, 30.f, 1.f));
+		auto* whirl1 = addGenerator(new WhirlwindGenerator(Vector3D(-5.f, 0.f, 0.f), cfg.size, 20.f, 30.f, 1.f));
+		auto* whirl2 = addGenerator(new WhirlwindGenerator(Vector3D(5.f, 0.f, 0.f), cfg.size, 20.f, 30.f, 1.f));
 
 		// Dos explosiones en posiciones distintas
-		auto* explosion1 = addGenerator(new ExplosionGenerator(Vector3D(0.f, 0.f, 0.f),120.f, 40.f, 0.1f));
-		auto* explosion2 = addGenerator(new ExplosionGenerator(Vector3D(15.f, 25.f, 0.f),70.f, 70.f, 2.0f));
+		auto* explosion1 = addGenerator(new ExplosionGenerator(Vector3D(0.f, 0.f, 0.f), 120.f, 40.f, 0.1f));
+		auto* explosion2 = addGenerator(new ExplosionGenerator(Vector3D(15.f, 25.f, 0.f), 70.f, 70.f, 2.0f));
 
 		// un solo sistema afectado por varios generadores
 		auto* system = createSystem(cfg);
