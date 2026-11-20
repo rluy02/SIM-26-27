@@ -5,11 +5,11 @@ class ForceGenerator {
 public:
 	virtual ~ForceGenerator() {};
 	virtual void updateForce(ParticleWithForces* particle, float dt) = 0;
-
 public: //ImGui
 	virtual void drawUI() {};
 	virtual const char* uiName() const { return "Generador"; }
-
+public: //visual helper
+	virtual void setGizmoVisible(bool) {};
 protected:
 	Vector3D _force;
 };

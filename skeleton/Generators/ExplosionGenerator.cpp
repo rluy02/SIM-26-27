@@ -6,6 +6,19 @@
 ExplosionGenerator::ExplosionGenerator(const Vector3D& pos, float k, float radius, float constante) : _pos(pos),
 _k(k), _radiusInfluence(radius), _constTiempo(constante), _elapsedTime(0.f), _active(false) {
 
+	_transform = physx::PxTransform(_pos);
+	_renderItem = nullptr;
+	rebuildVisual();
+}
+
+ExplosionGenerator::~ExplosionGenerator()
+{
+	clearVisual();
+}
+
+void ExplosionGenerator::clearVisual() {
+	if (_renderItem) _renderItem->release();
+	_renderItem = nullptr;
 }
 
 void ExplosionGenerator::updateForce(ParticleWithForces* p, float dt) {
@@ -25,7 +38,7 @@ void ExplosionGenerator::updateForce(ParticleWithForces* p, float dt) {
 
 	const float factorDistancia = _k / distSq;
 	const float factorTiempo = std::exp(-_elapsedTime / _constTiempo);
-	Vector3D force = factorDistancia * Vector3D(dx, dy, dz) * factorTiempo;
+	const Vector3D force = factorDistancia * Vector3D(dx, dy, dz) * factorTiempo;
 	p->addForce(force);
 }
 
@@ -46,10 +59,11 @@ void ExplosionGenerator::activate() {
 void ExplosionGenerator::drawUI() {
 	float c[3] = { _pos.x, _pos.y, _pos.z };
 	if (ImGui::DragFloat3("Centro", c, 0.5f))
-		_pos = Vector3D(c[0], c[1], c[2]);
+		setPosition(Vector3D(c[0], c[1], c[2])); //asi actualiza tambien graficamente
 
 	ImGui::DragFloat("K (fuerza)", &_k, 1.f, 0.f, 2000.f, "%.1f", ImGuiSliderFlags_AlwaysClamp);
-	ImGui::DragFloat("Radio de influencia", &_radiusInfluence, 0.5f, 0.5f, 300.f, "%.1f", ImGuiSliderFlags_AlwaysClamp);
+	if (ImGui::DragFloat("Radio de influencia", &_radiusInfluence, 0.5f, 0.5f, 300.f, "%.1f", ImGuiSliderFlags_AlwaysClamp))
+		rebuildVisual();
 	ImGui::DragFloat("Tau (duracion)", &_constTiempo, 0.01f, 0.05f, 10.f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
 
 	if (_active)
@@ -58,6 +72,26 @@ void ExplosionGenerator::drawUI() {
 		ImGui::TextDisabled("inactiva");
 
 	if (ImGui::Button("Detonar")) activate();
+}
+
+void ExplosionGenerator::rebuildVisual() {
+	clearVisual();
+	if (!_visible) return;
+	physx::PxShape* shape = CreateShape(physx::PxSphereGeometry(_radiusInfluence));
+	_renderItem = new RenderItem(shape, &_transform, Vector4(1.f, 0.5f, 0.1f, 0.1f));
+	shape->release();
+
+}
+
+void ExplosionGenerator::setPosition(const Vector3D& pos) {
+	_pos = pos;
+	_transform.p = physx::PxVec3(pos);
+};
+
+void ExplosionGenerator::setGizmoVisible(bool v) {
+	if (v == _visible) return;
+	_visible = v;
+	rebuildVisual();
 }
 
 //Se habla del tiempo DESDE que ocurrio la explosion. Con eso en cuenta se puede simular la perdida de energia

@@ -61,6 +61,11 @@ public:
 	}
 
 	void drawDebugUI() override {
+		//---
+		if (ImGui::Checkbox("Mostrar gizmos", &_showGizmos))
+			for (ForceGenerator* g : _forceGenerators)
+				g->setGizmoVisible(_showGizmos);
+		ImGui::Separator();
 		//----
 		if (ImGui::Button("Detonar todas"))
 			for (ExplosionGenerator* e : _explosions) e->activate();   // igual que la tecla E
@@ -116,6 +121,7 @@ private:
 	template <typename T>
 	T* addGenerator(T* generator) {
 		_forceGenerators.push_back(generator);
+		generator->setGizmoVisible(_showGizmos); //Que respeten el estado actual del debug
 		return generator;
 	}
 
@@ -211,4 +217,5 @@ private:
 	std::vector<ParticleSystemWithForces*> _systems;
 	std::vector< ForceGenerator*> _forceGenerators; //para no tener que eliminar manualmente
 	std::vector<ExplosionGenerator*> _explosions; //para simular varias explosiones
+	bool _showGizmos = true;
 };

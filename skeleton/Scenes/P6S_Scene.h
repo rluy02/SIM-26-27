@@ -80,7 +80,7 @@ private:
 	}
 	void actividad1() {
 		//																								  damping
-		_ball = addParticle(new ParticleWithForces(Vector3D(0.f, 10.f, 0.f), Vector3D(0.f, 0.f, 0.f), 1.f, 0.7f, 1.f,
+		_ball = addParticle(new ParticleWithForces(Vector3D(0.f, 10.f, 0.f), Vector3D(0.f, 0.f, 0.f), 1.f, 0.99f, 1.f,
 			Vector4(0.f, 1.f, 1.f, 1.f)));
 
 		_gravity = addGenerator(new GravityGenerator());
